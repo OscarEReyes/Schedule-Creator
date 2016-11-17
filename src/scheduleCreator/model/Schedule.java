@@ -25,7 +25,7 @@ public class Schedule
 	
 	public String getClassLocation()
 	{
-		return this.getClassLocation();
+		return this.classLocation;
 	}
 	
 }
