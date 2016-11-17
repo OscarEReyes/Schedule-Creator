@@ -12,4 +12,22 @@ public class Schedule
 		this.classHours = hours;
 		this.classLocation = location;
 	}
+	
+	public String getClassDays()
+	{
+		return this.classDays;
+	}
+	
+	public String getClassHours()
+	{
+		return this.classHours;
+	}
+	
+	public String getClassLocation()
+	{
+		return this.getClassLocation();
+	}
+	
 }
+
+	
