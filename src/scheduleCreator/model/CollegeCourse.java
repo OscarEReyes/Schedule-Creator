@@ -1,12 +1,62 @@
 package scheduleCreator.model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.IntegerProperty;
+
 public class CollegeCourse {
-	private final CourseIdentity courseInfo;
-	private final int creditHours;
+	private final IntegerProperty creditHours;
+	private final StringProperty courseDepartment;
+	private final StringProperty courseNumber;
+	private final StringProperty courseName;
+	// optional
+	private final StringProperty prefProf;
 	
-	public CollegeCourse(final CourseIdentity identity){
-		this.courseInfo = identity;
-		this.creditHours = identity.getCourseNumber().charAt(1);
+	public CollegeCourse(CollegeCourseBuilder builder) {
+		this.courseDepartment = builder.courseDepartment;
+		this.courseNumber = builder.courseNumber;
+		this.courseName = builder.courseName;
+		this.creditHours = 	new SimpleIntegerProperty(
+				(int) this.courseNumber.get().charAt(1));
+		this.prefProf = builder.prefProf;
 	}
+	
+	public static class CollegeCourseBuilder {
+		private StringProperty courseDepartment;
+		private StringProperty courseNumber;
+		private StringProperty courseName;
+		private IntegerProperty creditHours;
+		private StringProperty prefProf;
+		
+		CollegeCourseBuilder(String courseName){
+			this.courseName = new SimpleStringProperty(courseName);
+		}
+		
+		CollegeCourseBuilder courseDepartment(String courseDepartment){
+			this.courseDepartment = new SimpleStringProperty(courseDepartment);
+			return this;
+		}
+		
+		CollegeCourseBuilder courseNumber(String courseNumber){
+			this.courseNumber = new SimpleStringProperty(courseNumber);
+			return this;
+		}
+		
+		CollegeCourseBuilder courseName(String courseName){
+			this.courseName = new SimpleStringProperty(courseName);
+			return this;
+		}
+		
+		CollegeCourseBuilder prefProf(String prefProf){
+			this.prefProf = new SimpleStringProperty(prefProf);
+			return this;
+		}
+		
+		public CollegeCourse build(){
+			return new CollegeCourse(this);
+		}
+	}
+	
 	
 }
