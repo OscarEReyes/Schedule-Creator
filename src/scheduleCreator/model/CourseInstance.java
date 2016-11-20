@@ -1,6 +1,6 @@
 package scheduleCreator.model;
 
-public class CourseInstance extends CollegeCourse {
+public class CourseInstance {
 	private final Schedule schedule; 
 	private final int placesLeft;
 	private final String classCrn;
