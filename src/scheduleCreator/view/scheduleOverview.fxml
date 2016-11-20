@@ -32,13 +32,13 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <CheckBox layoutX="29.0" layoutY="65.0" mnemonicParsing="false" text="MWF" />
-                              <CheckBox layoutX="104.0" layoutY="65.0" mnemonicParsing="false" text="TR" />
+                              <CheckBox layoutX="29.0" layoutY="65.0" mnemonicParsing="false" selected="true" text="MWF" />
+                              <CheckBox layoutX="104.0" layoutY="65.0" mnemonicParsing="false" selected="true" text="TR" />
                               <Label layoutX="29.0" layoutY="41.0" prefHeight="17.0" prefWidth="92.0" text="Day Preferences" />
                               <CheckBox layoutX="31.0" layoutY="118.0" mnemonicParsing="false" selected="true" text="Any " />
                               <Label layoutX="29.0" layoutY="94.0" prefHeight="17.0" prefWidth="98.0" text="Preferred Hours" />
-                              <ChoiceBox layoutX="90.0" layoutY="147.0" prefHeight="25.0" prefWidth="70.0" />
-                              <ChoiceBox layoutX="90.0" layoutY="184.0" prefHeight="25.0" prefWidth="70.0" />
+                              <ChoiceBox disable="true" layoutX="90.0" layoutY="147.0" prefHeight="25.0" prefWidth="70.0" />
+                              <ChoiceBox disable="true" layoutX="90.0" layoutY="184.0" prefHeight="25.0" prefWidth="70.0" />
                               <Label layoutX="29.0" layoutY="151.0" text="Custom" />
                            </children>
                         </AnchorPane>
