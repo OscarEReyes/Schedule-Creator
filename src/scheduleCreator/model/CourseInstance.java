@@ -10,7 +10,7 @@ public class CourseInstance extends CollegeCourse {
 	//optional
 	private CourseInstance lab;
 	
-	public CourseInstance(CourseInstanceBuilder builder){
+	public CourseInstance(CourseInstanceBuilder builder) {
 		this.schedule = builder.schedule;
 		this.placesLeft = builder.placesLeft;
 		this.classCrn = builder.classCrn;
@@ -19,7 +19,7 @@ public class CourseInstance extends CollegeCourse {
 		this.lab = builder.lab;
 	}
 	
-	public static class CourseInstanceBuilder{
+	public static class CourseInstanceBuilder {
 			private Schedule schedule;
 			private int placesLeft;
 			private String classCrn;
@@ -27,35 +27,35 @@ public class CourseInstance extends CollegeCourse {
 			private String classProf;
 			private CourseInstance lab;
 			
-			public CourseInstanceBuilder(final Schedule schedule){	
+			public CourseInstanceBuilder(final Schedule schedule) {	
 				this.schedule = schedule;
 			}	
 			
-			public CourseInstanceBuilder placesLeft(int placesLeft){
+			public CourseInstanceBuilder placesLeft(int placesLeft) {
 				this.placesLeft = placesLeft;
 				return this;
 			}
-			public CourseInstanceBuilder classCrn(String classCrn){
+			public CourseInstanceBuilder classCrn(String classCrn) {
 				this.classCrn = classCrn;
 				return this;
 			}
 	
-			public CourseInstanceBuilder classSection(String classSection){
+			public CourseInstanceBuilder classSection(String classSection) {
 				this.classSection = classSection;
 				return this;
 			}
 			
-			public CourseInstanceBuilder classProf(String classProf){
+			public CourseInstanceBuilder classProf(String classProf) {
 				this.classProf = classProf;
 				return this;
 			}
 		
-			public CourseInstanceBuilder lab(CourseInstance lab){
+			public CourseInstanceBuilder lab(CourseInstance lab) {
 				this.lab = lab;
 				return this;
 			}
 			
-			public CourseInstance build(){
+			public CourseInstance build() {
 				return new CourseInstance(this);
 			}
 	}
