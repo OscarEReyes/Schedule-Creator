@@ -6,6 +6,7 @@ public class CourseInstance {
 	private final String classCrn;
 	private final String classSection;
 	private final String classProf;
+	private final CollegeCourse courseInfo;
 	
 	//optional
 	private CourseInstance lab;
@@ -16,6 +17,7 @@ public class CourseInstance {
 		this.classCrn = builder.classCrn;
 		this.classSection = builder.classSection;
 		this.classProf = builder.classProf;
+		this.courseInfo = builder.courseInfo;
 		this.lab = builder.lab;
 	}
 	
@@ -25,6 +27,7 @@ public class CourseInstance {
 			private String classCrn;
 			private String classSection;
 			private String classProf;
+			private CollegeCourse courseInfo;
 			private CourseInstance lab;
 			
 			public CourseInstanceBuilder(final Schedule schedule) {	
@@ -35,6 +38,7 @@ public class CourseInstance {
 				this.placesLeft = placesLeft;
 				return this;
 			}
+			
 			public CourseInstanceBuilder classCrn(String classCrn) {
 				this.classCrn = classCrn;
 				return this;
@@ -49,6 +53,12 @@ public class CourseInstance {
 				this.classProf = classProf;
 				return this;
 			}
+			
+			public CourseInstanceBuilder courseInfo(CollegeCourse courseInfo) {
+				this.courseInfo = courseInfo;
+				return this;
+			}
+	
 		
 			public CourseInstanceBuilder lab(CourseInstance lab) {
 				this.lab = lab;
