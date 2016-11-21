@@ -22,6 +22,22 @@ public class CollegeCourse {
 		this.prefProf = builder.prefProf;
 	}
 	
+	public String getCourseDepartment() {
+		return courseDepartment.get();
+	}
+	
+	public String getCourseNumber() {
+		return courseNumber.get();
+	}
+	
+	public String getCourseName() {
+		return courseName.get();
+	}
+	
+	public int getCreditHours() {
+		return creditHours.get();
+	}
+	
 	public static class CollegeCourseBuilder {
 		private StringProperty courseDepartment;
 		private StringProperty courseNumber;
