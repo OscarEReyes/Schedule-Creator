@@ -38,7 +38,7 @@ public class CollegeCourse {
 		return creditHours.get();
 	}
 	
-	public int getPrefProf() {
+	public String getPrefProf() {
 		return prefProf.get();
 	}
 	
