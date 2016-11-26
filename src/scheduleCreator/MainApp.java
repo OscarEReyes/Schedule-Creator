@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.view.ScheduleOverviewController;
 
 public class MainApp extends Application {
 
@@ -75,6 +76,11 @@ public class MainApp extends Application {
             
             // Sets the schedule overview into the center of root layout.
             rootLayout.setCenter(scheduleOverview);
+            
+         // Give mainApp access to the ScheduleOverviewController class.
+            ScheduleOverviewController controller = loader.getController();
+            controller.setMainApp(this);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
