@@ -38,6 +38,24 @@ public class CollegeCourse {
 		return creditHours.get();
 	}
 	
+	// Get Property Methods
+	
+	public IntegerProperty creditHoursProperty() {
+		return creditHours;
+	}
+	
+	public StringProperty courseDepartmentProperty() {
+		return courseDepartment;
+	}
+	
+	public StringProperty courseNumberProperty() {
+		return courseNumber;
+	}
+	
+	public StringProperty courseNameProperty() {
+		return courseName;
+	}
+	
 	public static class CollegeCourseBuilder {
 		private StringProperty courseDepartment;
 		private StringProperty courseNumber;
