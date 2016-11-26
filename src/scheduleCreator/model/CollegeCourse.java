@@ -38,6 +38,10 @@ public class CollegeCourse {
 		return creditHours.get();
 	}
 	
+	public int getPrefProf() {
+		return prefProf.get();
+	}
+	
 	// Get Property Methods
 	
 	public IntegerProperty creditHoursProperty() {
