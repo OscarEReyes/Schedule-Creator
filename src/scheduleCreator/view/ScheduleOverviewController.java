@@ -9,10 +9,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import scheduleCreator.MainApp;
 import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.model.Schedule;
 
 public class ScheduleOverviewController {
 	@FXML
-	private TableView<CollegeCourse> ScheduleTable;
+	private TableView<CollegeCourse> CourseTable;
     @FXML
     private TableColumn<CollegeCourse, String> courseNameColumn;
 
@@ -52,7 +53,7 @@ public class ScheduleOverviewController {
     // "Listen" for selection changes and display the selected course's details
     // when selection is changed
     
-    ScheduleTable.getSelectionModel().selectedItemProperty().addListener(
+    CourseTable.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> showCollegeCourseDetails(newValue));
 	}
 
@@ -65,7 +66,7 @@ public class ScheduleOverviewController {
 		this.mainApp = mainApp;
 
 	    // Add observable list data to the table
-	    ScheduleTable.setItems(mainApp.getCollegeCourseData());
+	    CourseTable.setItems(mainApp.getCollegeCourseData());
 	}
 	
 	/**
@@ -98,14 +99,56 @@ public class ScheduleOverviewController {
 	 */
 	@FXML
 	private void handleRemoveCourse() {
-	    int selectedIndex = ScheduleTable.getSelectionModel().getSelectedIndex();
+	    int selectedIndex = CourseTable.getSelectionModel().getSelectedIndex();
 	    if (selectedIndex >= 0) {
-	    	ScheduleTable.getItems().remove(selectedIndex);
+	    	CourseTable.getItems().remove(selectedIndex);
 	   	} else {
 	        Alert alert = new Alert(AlertType.WARNING);
 	        alert.initOwner(mainApp.getPrimaryStage());
 	        alert.setTitle("No Selection");
 	        alert.setContentText("Select a course from the table.");
+	        alert.showAndWait();
+	    }
+	}
+	
+	
+	/**
+	 * Called when the user clicks the confirm button. 
+	 * Opens a dialog for the user to input data and create a new CollegeCourse
+	 */
+	@FXML
+	private void handleNewCollegeCourse() {
+	    CollegeCourse tempCollegeCourse = new CollegeCourse.CollegeCourseBuilder("")
+	    		.courseDepartment(" ")
+	    		.courseNumber(" ")
+	    		.build();
+	    
+	    boolean confirmedClicked = mainApp.showCollegeCourseEditDialog(tempCollegeCourse);
+	    if (confirmedClicked) {
+	        mainApp.getCollegeCourseData().add(tempCollegeCourse);
+	    }
+	}
+
+	
+	/**
+	 * Called when the user clicks the edit button. 
+	 * Opens a dialog the user uses to edit a CollegeCourse object.
+	 */
+	@FXML
+	private void handleEditCollegeCourse() {
+	    CollegeCourse selectedCourse = CourseTable.getSelectionModel().getSelectedItem();
+	    if (selectedCourse != null) {
+	        boolean confirmedClicked = mainApp.showCollegeCourseEditDialog(selectedCourse);
+	        if (confirmedClicked) {
+	            showCollegeCourseDetails(selectedCourse);
+	        }
+	    } else {
+	        // Handle no course being selected.
+	        Alert alert = new Alert(AlertType.WARNING);
+	        alert.initOwner(mainApp.getPrimaryStage());
+	        alert.setTitle("No Course Selected");
+	        alert.setContentText("Please select a Course in the table.");
+
 	        alert.showAndWait();
 	    }
 	}
