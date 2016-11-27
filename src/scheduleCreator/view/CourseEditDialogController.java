@@ -35,6 +35,7 @@ public class CourseEditDialogController {
     private void initialize() {
     }
 
+    
     /**
      * Sets this dialog's stage.
      * 
@@ -43,4 +44,20 @@ public class CourseEditDialogController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
+    
+    
+    /**
+     * Sets fields to the values of the course that is being edited.
+     * 
+     * @param course
+     */
+    public void setCourse(CollegeCourse course) {
+        this.course = course;
+
+        courseDepartmentField.setText(course.getCourseDepartment());
+        courseNumberField.setText(course.getCourseNumber());
+        courseNameField.setText(course.getCourseName());
+        prefProfField.setText(course.getPrefProf());
+    }
+
 }
