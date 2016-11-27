@@ -17,7 +17,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="385.0">
                <children>
-                  <Button layoutX="135.0" layoutY="297.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Remove Course" />
+                  <Button layoutX="135.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleRemoveCourse" prefHeight="25.0" prefWidth="100.0" text="Remove Course" />
                   <Button layoutX="24.0" layoutY="297.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Add Course" />
                   <GridPane layoutX="18.0" layoutY="81.0" prefHeight="160.0" prefWidth="481.0">
                     <columnConstraints>
