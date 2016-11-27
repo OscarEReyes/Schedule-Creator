@@ -86,26 +86,26 @@ public class CollegeCourse {
 		private IntegerProperty creditHours;
 		private StringProperty prefProf;
 		
-		CollegeCourseBuilder(String courseName){
+		public CollegeCourseBuilder(String courseName){
 			this.courseName = new SimpleStringProperty(courseName);
 		}
 		
-		CollegeCourseBuilder courseDepartment(String courseDepartment){
+		public CollegeCourseBuilder courseDepartment(String courseDepartment){
 			this.courseDepartment = new SimpleStringProperty(courseDepartment);
 			return this;
 		}
 		
-		CollegeCourseBuilder courseNumber(String courseNumber){
+		public CollegeCourseBuilder courseNumber(String courseNumber){
 			this.courseNumber = new SimpleStringProperty(courseNumber);
 			return this;
 		}
 		
-		CollegeCourseBuilder courseName(String courseName){
+		public CollegeCourseBuilder courseName(String courseName){
 			this.courseName = new SimpleStringProperty(courseName);
 			return this;
 		}
 		
-		CollegeCourseBuilder prefProf(String prefProf){
+		public CollegeCourseBuilder prefProf(String prefProf){
 			this.prefProf = new SimpleStringProperty(prefProf);
 			return this;
 		}
