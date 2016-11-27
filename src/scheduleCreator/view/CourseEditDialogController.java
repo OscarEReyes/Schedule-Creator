@@ -86,6 +86,14 @@ public class CourseEditDialogController {
         }
     }
     
+    /**
+     * Executed when the cancel button is clicked.
+     */
+    @FXML
+    private void handleCancel() {
+        dialogStage.close();
+    }
+    
     
     /**
      * Verifies that the user input is valid.
