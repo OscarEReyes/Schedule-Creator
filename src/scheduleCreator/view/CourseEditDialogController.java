@@ -2,6 +2,8 @@ package scheduleCreator.view;
 import java.awt.TextField;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import scheduleCreator.model.CollegeCourse;
 
@@ -59,5 +61,68 @@ public class CourseEditDialogController {
         courseNameField.setText(course.getCourseName());
         prefProfField.setText(course.getPrefProf());
     }
+    
+    /**
+     * Returns true if user has clicked the confirm button,
+     * Returns false if it is not the case.
+     * @return
+     */
+    public boolean isConfirmClicked() {
+        return confirmClicked;
+    }
+
+    /**
+     * Executed if the user clicks confirm.
+     */
+    @FXML
+    private void handleConfirm() {
+        if (isInputValid()) {
+            course.setCourseDepartment(courseDepartmentField.getText());
+            course.setCourseNumber(courseNumberField.getText());
+            course.setCourseName(courseNameField.getText());
+            course.setPrefProf(prefProfField.getText());
+            confirmClicked = true;
+            dialogStage.close();
+        }
+    }
+    
+    
+    /**
+     * Verifies that the user input is valid.
+     * 
+     * @return true when input is valid.
+     */
+    private boolean isInputValid() {
+        String errorMessage = "";
+
+        if (courseDepartmentField.getText() == null || 
+        		courseDepartmentField.getText().length() != 4) {
+            errorMessage += "No valid course department!\n"; 
+        }
+        if (courseNumberField.getText() == null || 
+        		courseNumberField.getText().length() != 4) {
+            errorMessage += "No valid course number!\n"; 
+        }
+        if (courseNameField.getText() == null || 
+        		courseNameField.getText().length() == 0) {
+            errorMessage += "No valid course name!\n"; 
+        }
+
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Create error messag window.
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.initOwner(dialogStage);
+            alert.setTitle("Invalid Fields");
+            alert.setContentText(errorMessage);
+            
+            // Show error message window and wait for a response.
+            alert.showAndWait();
+
+            return false;
+        }
+    }
+
 
 }
