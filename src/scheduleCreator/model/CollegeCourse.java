@@ -22,6 +22,25 @@ public class CollegeCourse {
 		this.prefProf = builder.prefProf;
 	}
 	
+	// Setters
+	
+	public void setCourseDepartment(String courseDepartment){
+		this.courseDepartment.set(courseDepartment);
+	}
+	
+	public void setCourseNumber(String courseNumber){
+		this.courseNumber.set(courseNumber);
+	}
+	public void setCourseName(String courseName){
+		this.courseName.set(courseName);
+	}
+	
+	public void setPrefProf(String prefProf){
+		this.courseName.set(prefProf);
+	}
+		
+	// Getters
+	
 	public String getCourseDepartment() {
 		return courseDepartment.get();
 	}
