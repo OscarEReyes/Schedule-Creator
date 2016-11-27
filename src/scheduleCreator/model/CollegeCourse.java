@@ -88,6 +88,7 @@ public class CollegeCourse {
 		
 		public CollegeCourseBuilder(String courseName){
 			this.courseName = new SimpleStringProperty(courseName);
+			this.prefProf = new SimpleStringProperty("");
 		}
 		
 		public CollegeCourseBuilder courseDepartment(String courseDepartment){
