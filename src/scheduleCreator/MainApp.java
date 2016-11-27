@@ -9,8 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.view.CourseEditDialogController;
 import scheduleCreator.view.ScheduleOverviewController;
 
 public class MainApp extends Application {
@@ -96,5 +98,48 @@ public class MainApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    
+    /**
+     * Opens a dialog to edit details for the specified CollegeCourse course object. 
+     * If the user clicks Confirm, the changes made are saved 
+     * into the passed CollegeCourse object and 
+     * true is returned.
+     * 
+     * @param CollegeCourse -  the CollegeCourse object to be edited
+     * @return true if the user clicked the Confirm button, otherwise false
+     */
+    public boolean showCollegeCourseEditDialog(CollegeCourse CollegeCourse) {
+        try {
+            // Load the course edit dialog fxml file 
+        	// Create a new stage for the dialog.
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(MainApp.class.getResource("view/CourseEditDialog.fxml"));
+            AnchorPane page = (AnchorPane) fxmlLoader.load();
+
+            // Create the dialog Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Course");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            
+            // Create Scene and set scene
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            // Set the controller
+            CourseEditDialogController controller = fxmlLoader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setCourse(CollegeCourse);
+
+            // Show the dialog and wait until the user closes it
+            dialogStage.showAndWait();
+
+            return controller.isConfirmClicked();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
