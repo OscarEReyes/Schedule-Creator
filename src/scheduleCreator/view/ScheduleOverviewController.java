@@ -90,5 +90,14 @@ public class ScheduleOverviewController {
 
 	    }
 	}
+	
+	/**
+	 * Called when the user clicks on the remove course button.
+	 */
+	@FXML
+	private void handleRemoveCourse() {
+	    int selectedIndex = ScheduleTable.getSelectionModel().getSelectedIndex();
+	    ScheduleTable.getItems().remove(selectedIndex);
+	}
 }
 
