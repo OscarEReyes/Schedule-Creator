@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
-<AnchorPane prefHeight="200.0" prefWidth="450.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60">
+<AnchorPane prefHeight="200.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduleCreator.view.CourseEditDialogController">
    <children>
       <GridPane layoutX="21.0" layoutY="35.0" prefHeight="162.0" prefWidth="394.0">
         <columnConstraints>
@@ -31,14 +30,14 @@
             <Label layoutX="5.0" prefHeight="20.0" prefWidth="82.0" text="Course Name" GridPane.rowIndex="2" />
             <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
               <buttons>
-                <Button mnemonicParsing="false" text="Confirm" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" text="Cancel" textAlignment="CENTER" />
+                <Button mnemonicParsing="false" onAction="#handleConfirm" text="Confirm" textAlignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#handleCancel" text="Cancel" textAlignment="CENTER" />
               </buttons>
             </ButtonBar>
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="courseDepartmentField" GridPane.columnIndex="1" />
+            <TextField fx:id="courseNumberField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="courseNameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="prefProfField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>
