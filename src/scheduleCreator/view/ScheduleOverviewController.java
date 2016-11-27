@@ -56,5 +56,30 @@ public class ScheduleOverviewController {
 	    // Add observable list data to the table
 	    ScheduleTable.setItems(mainApp.getCollegeCourseData());
 	}
+	
+	/**
+	 * Fills every text field to display information about the college course.
+	 * If the specified college course is null, clears all text fields.
+	 * 
+	 * @param collegecourse or null
+	 */
+	private void showCollegeCourseDetails(CollegeCourse course) {
+	    if (course != null) {
+	        // Fill the labels with info from the course object.
+	        courseLabel.setText(course.getCourseDepartment() + 
+	        					course.getCourseNumber());
+	        courseNameLabel.setText(course.getCourseName());
+	        creditHoursLabel.setText(Integer.toString(course.getCreditHours()));
+	        prefProfLabel.setText(course.getPrefProf());
+	  
+	    } else {
+	        // CollegeCourse is null, clear all text.
+	        courseLabel.setText("");
+	        courseNameLabel.setText("");
+	        creditHoursLabel.setText("");
+	        prefProfLabel.setText("");
+
+	    }
+	}
 }
 
