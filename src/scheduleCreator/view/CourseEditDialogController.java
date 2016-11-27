@@ -26,4 +26,21 @@ public class CourseEditDialogController {
 	private Stage dialogStage;
 	private CollegeCourse course;
 	private Boolean confirmClicked = false;
+	
+	/**
+     * Initializes the controller class. 
+     * Automatically called once the fxml file has loaded.
+     */
+    @FXML
+    private void initialize() {
+    }
+
+    /**
+     * Sets this dialog's stage.
+     * 
+     * @param dialogStage
+     */
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
+    }
 }
