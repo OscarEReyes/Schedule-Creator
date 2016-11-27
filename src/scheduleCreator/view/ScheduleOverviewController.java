@@ -2,6 +2,8 @@ package scheduleCreator.view;
 
 	
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -97,7 +99,15 @@ public class ScheduleOverviewController {
 	@FXML
 	private void handleRemoveCourse() {
 	    int selectedIndex = ScheduleTable.getSelectionModel().getSelectedIndex();
-	    ScheduleTable.getItems().remove(selectedIndex);
+	    if (selectedIndex >= 0) {
+	    	ScheduleTable.getItems().remove(selectedIndex);
+	   	} else {
+	        Alert alert = new Alert(AlertType.WARNING);
+	        alert.initOwner(mainApp.getPrimaryStage());
+	        alert.setTitle("No Selection");
+	        alert.setContentText("Select a course from the table.");
+	        alert.showAndWait();
+	    }
 	}
 }
 
