@@ -43,6 +43,15 @@ public class ScheduleOverviewController {
 	private void initialize() {
 	// Initialize the Schedule table with the two columns.
 	courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().courseNameProperty());
+	
+	 // Clear the CollegeCourse Information.
+    showCollegeCourseDetails(null);
+
+    // "Listen" for selection changes and display the selected course's details
+    // when selection is changed
+    
+    ScheduleTable.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> showCollegeCourseDetails(newValue));
 	}
 
 	/**
