@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import scheduleCreator.model.CollegeCourse;
 
 public class LoginDialogController {
 	@FXML
@@ -14,6 +15,7 @@ public class LoginDialogController {
 	private TextField passwordField;
 	
 	private Stage dialogStage;
+	private User user;
 	private Boolean loginClicked = false;
 	
 	public class User{
@@ -63,12 +65,12 @@ public class LoginDialogController {
     
     
     /**
-     * Executed if the user clicks confirm.
+     * Executed if the user clicks login.
      */
     @FXML
     private void handleLogin() {
         if (isInputValid()) {
-        	User user = new User(usernameField.getText(), passwordField.getText());
+        	this.user = new User(usernameField.getText(), passwordField.getText());
             loginClicked = true;
             dialogStage.close();
         }
@@ -82,7 +84,7 @@ public class LoginDialogController {
         dialogStage.close();
     }
     
-    
+
     /**
      * Verifies that the user input is valid.
      * 
