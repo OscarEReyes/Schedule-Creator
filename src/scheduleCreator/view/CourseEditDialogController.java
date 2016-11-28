@@ -15,13 +15,10 @@ import scheduleCreator.model.CollegeCourse;
 public class CourseEditDialogController {
 	@FXML
 	private TextField courseDepartmentField;
-	
 	@FXML
 	private TextField courseNumberField;
-	
 	@FXML 
 	private TextField courseNameField;
-	
 	@FXML
 	private TextField prefProfField;
 	
@@ -119,7 +116,7 @@ public class CourseEditDialogController {
         if (errorMessage.length() == 0) {
             return true;
         } else {
-            // Create error messag window.
+            // Create error message window.
             Alert alert = new Alert(AlertType.ERROR);
             alert.initOwner(dialogStage);
             alert.setTitle("Invalid Fields");
