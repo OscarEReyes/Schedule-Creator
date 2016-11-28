@@ -161,7 +161,7 @@ public class MainApp extends Application {
         }
     }
     
-    public boolean showLoginDialog() {
+    public User showLoginDialog() {
     	try {
     		// Load the login dialog fxml file 
         	// Create a new stage for the dialog.
@@ -185,10 +185,10 @@ public class MainApp extends Application {
             
             // Show the dialog and wait until the user closes it
             dialogStage.showAndWait();
-            return controller.isLoginClicked();
+            return controller.getUser();
     	} catch (IOException e) {
     		e.printStackTrace();
-    		return false;
+    		return null;
     	}
     }
      
