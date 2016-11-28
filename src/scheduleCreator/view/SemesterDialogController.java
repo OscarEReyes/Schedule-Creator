@@ -11,8 +11,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import scheduleCreator.view.LoginDialogController.User;
 
 public class SemesterDialogController {
 	@FXML
@@ -22,7 +25,7 @@ public class SemesterDialogController {
 	
 	private Stage dialogStage;
 	private Boolean confirmClicked = false;
-
+	private Semester semester;
 	
 	/**
      * Initializes the controller class. 
@@ -64,4 +67,58 @@ public class SemesterDialogController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
+    
+    
+    /**
+     * Returns true if user has clicked the confirm button,
+     * Returns false if it is not the case.
+     * @return
+     */
+    public boolean isConfirmClicked() {
+        return confirmClicked;
+    }
+    
+    
+    /**
+     * Executed if the user clicks confirm.
+     */
+    @FXML
+    private void handleConfirm() {
+    	this.semester = new Semester(seasonChoiceBox.getValue(), yearChoiceBox.getValue());
+        confirmClicked = true;
+        dialogStage.close();
+    }
+    
+    /**
+     * Executed when the cancel button is clicked.
+     */
+    @FXML
+    private void handleCancel() {
+        dialogStage.close();
+    }
+    
+    public Semester getSemester() {
+		return this.semester;
+	}
+    
+    
+    public class Semester {
+		private final String season;
+		private final String year;
+		
+		public Semester(final String season, final String year){
+			this.season = season;
+			this.year = year;
+		}
+		
+		public String getSeason() {
+			return this.season;
+		}
+		
+		public String getYear() {
+			return this.year;
+		}
+		
+		
+	}
 }
