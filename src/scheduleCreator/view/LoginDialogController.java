@@ -14,7 +14,7 @@ public class LoginDialogController {
 	private TextField passwordField;
 	
 	private Stage dialogStage;
-	private Boolean loginClicked = false;
+	private boolean loginClicked = false;
 	
 	public class User{
 		private final String username;
