@@ -36,7 +36,7 @@ public class CollegeCourse {
 	}
 	
 	public void setPrefProf(String prefProf){
-		this.courseName.set(prefProf);
+		this.prefProf.set(prefProf);
 	}
 		
 	// Getters
@@ -98,11 +98,6 @@ public class CollegeCourse {
 		
 		public CollegeCourseBuilder courseNumber(String courseNumber){
 			this.courseNumber = new SimpleStringProperty(courseNumber);
-			return this;
-		}
-		
-		public CollegeCourseBuilder courseName(String courseName){
-			this.courseName = new SimpleStringProperty(courseName);
 			return this;
 		}
 		
