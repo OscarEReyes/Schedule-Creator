@@ -52,6 +52,15 @@ public class LoginDialogController {
         this.dialogStage = dialogStage;
     }
     
+    /**
+     * Returns true if user has clicked the login button,
+     * Returns false if it is not the case.
+     * @return
+     */
+    public boolean isLoginClicked() {
+        return loginClicked;
+    }
+    
     
     /**
      * Executed if the user clicks confirm.
