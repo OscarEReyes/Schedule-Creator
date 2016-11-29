@@ -7,9 +7,7 @@
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/cglib-nodep-3.2.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/commons-exec-1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/commons-io-2.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/commons-lang3-3.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/cssparser-0.9.20.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/gson-2.3.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/guava-19.0.jar"/>
@@ -23,7 +21,6 @@
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/javax.servlet-api-3.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/jetty-io-9.2.13.v20150730.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/jetty-util-9.2.13.v20150730.jar"/>
-	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/jna-4.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/neko-htmlunit-2.23.jar"/>
@@ -37,5 +34,24 @@
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/selenium-java-3.0.1/lib/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/dist/tess4j-3.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/commons-beanutils-1.9.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/commons-io-2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/ghost4j-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/itext-2.1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/jai-imageio-core-1.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/jul-to-slf4j-1.7.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/lept4j-1.2.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/log4j-over-slf4j-1.7.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/logback-classic-1.1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/logback-core-1.1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/rococoa-core-0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/slf4j-api-1.7.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/oscarjr/Downloads/Tess4J-3.2.1-src/Tess4J/lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
