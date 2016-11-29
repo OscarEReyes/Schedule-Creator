@@ -24,7 +24,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button layoutX="383.0" layoutY="297.0" mnemonicParsing="false" text="Generate Schedule" />
+                  <Button layoutX="383.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleGenerateSchedule" text="Generate Schedule" />
                   <Button layoutX="233.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleEditCollegeCourse" prefHeight="25.0" prefWidth="45.0" text="Edit" />
                   <GridPane layoutX="18.0" layoutY="81.0" prefHeight="199.0" prefWidth="481.0">
                     <columnConstraints>
