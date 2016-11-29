@@ -24,6 +24,8 @@ public class MainApp extends Application {
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 	private ObservableList<CollegeCourse> CollegeCourseData = FXCollections.observableArrayList();
+	private User user;
+	private Semester semester;
 
 	/**
 	 * Constructor
@@ -84,7 +86,16 @@ public class MainApp extends Application {
 
 			// Give mainApp access to the ScheduleOverviewController class.   
 			ScheduleOverviewController controller = loader.getController();   
-			controller.setMainApp(this);           
+			controller.setMainApp(this);  
+			
+			do {
+				user = showLoginDialog();
+				semester = showSemesterDialog();
+				
+			} while (user == null || semester == null);
+			
+			System.out.println(user.getUsername());
+			System.out.println(semester.getYear());
 		} catch (IOException e) {  
 			e.printStackTrace();
 		}
