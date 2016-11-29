@@ -42,11 +42,11 @@ public class SemesterDialogController {
         seasonList.add("Summer Intersession");
         
         List<String> yearList = new ArrayList<String>();
-    	seasonList.add("2016");
-    	seasonList.add("2017");
-        seasonList.add("2018");
-        seasonList.add("2019");
-        seasonList.add("2020");
+    	yearList.add("2016");
+    	yearList.add("2017");
+        yearList.add("2018");
+        yearList.add("2019");
+        yearList.add("2020");
         
         ObservableList<String> obSeasonList = FXCollections.observableList(seasonList);
         ObservableList<String> obYearList = FXCollections.observableList(yearList);
