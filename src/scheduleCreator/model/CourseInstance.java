@@ -11,6 +11,31 @@ public class CourseInstance {
 	//optional
 	private CourseInstance lab;
 	
+	// Getters
+	public Schedule getSchedule() {
+		return this.schedule;
+	}
+	
+	public int getPlacesLeft() {
+		return this.placesLeft;
+	}
+	
+	public String getClassCrn() {
+		return this.classCrn;
+	}
+	
+	public String getClassSection() {
+		return this.classSection;
+	}
+	
+	public String getClassProf() {
+		return this.classProf;
+	}
+	
+	public CollegeCourse getCourseInfo() {
+		return this.courseInfo;
+	}
+	
 	public CourseInstance(CourseInstanceBuilder builder) {
 		this.schedule = builder.schedule;
 		this.placesLeft = builder.placesLeft;
