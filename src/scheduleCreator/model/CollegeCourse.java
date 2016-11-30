@@ -71,7 +71,7 @@ public class CollegeCourse {
 	}
 	
 	public List<CourseInstance> getCourseClasses() {
-		return this.classes
+		return this.courseClasses;
 	}
 	
 	// Get Property Methods
