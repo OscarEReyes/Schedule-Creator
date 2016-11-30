@@ -3,6 +3,9 @@ package scheduleCreator.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+
+import java.util.List;
+
 import javafx.beans.property.IntegerProperty;
 
 public class CollegeCourse {
@@ -13,6 +16,7 @@ public class CollegeCourse {
 	// optional
 	private final StringProperty prefProf;
 	
+	private List<CourseInstance> courseClasses;
 	public CollegeCourse(CollegeCourseBuilder builder) {
 		this.courseDepartment = builder.courseDepartment;
 		this.courseNumber = builder.courseNumber;
@@ -59,6 +63,10 @@ public class CollegeCourse {
 	
 	public String getPrefProf() {
 		return prefProf.get();
+	}
+	
+	public List<CourseInstance> getCourseClasses() {
+		return this.courseClasses;
 	}
 	
 	// Get Property Methods
