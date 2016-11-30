@@ -1,6 +1,9 @@
 package scheduleCreator;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -11,7 +14,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import ocr.ImageAnalyzer;
+import ocr.WebScraper;
 import scheduleCreator.model.CollegeCourse;
 import scheduleCreator.view.CourseEditDialogController;
 import scheduleCreator.view.LoginDialogController;
@@ -94,8 +98,6 @@ public class MainApp extends Application {
 				
 			} while (user == null || semester == null);
 			
-			System.out.println(user.getUsername());
-			System.out.println(semester.getYear());
 		} catch (IOException e) {  
 			e.printStackTrace();
 		}
@@ -114,7 +116,6 @@ public class MainApp extends Application {
 	public static void main(String[] args) {    
 		launch(args);    
 	}
-
 
 
 	/**
@@ -227,6 +228,18 @@ public class MainApp extends Application {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public String[] getCourseClasses(CollegeCourse course) throws IOException, InterruptedException{
+		List<String> courseClassesList = new ArrayList<String>();
+		File imageFile;
+		String results;
+		WebScraper scraper = new WebScraper();
+		ImageAnalyzer imAn = new ImageAnalyzer();
+		imageFile = scraper.scrapeCoursePage(user, course, semester);
+		results = imAn.analyzeImage(imageFile);
+		String[] classes = results.split("\\r?\\n");
+		return classes;
 	}
 	
 }
