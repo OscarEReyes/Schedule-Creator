@@ -17,6 +17,7 @@ public class CollegeCourse {
 	private final StringProperty prefProf;
 	
 	private List<CourseInstance> courseClasses;
+	private boolean prefProfAvailable;
 	
 	public CollegeCourse(CollegeCourseBuilder builder) {
 		this.courseDepartment = builder.courseDepartment;
@@ -47,6 +48,10 @@ public class CollegeCourse {
 	public void setCourseClasses(List<CourseInstance> classes) {
 		this.courseClasses = classes;
 	}
+	
+	public void setPrefProfAvailable(Boolean avail) {
+		this.prefProfAvailable = avail;
+	}
 		
 	// Getters
 	
@@ -72,6 +77,10 @@ public class CollegeCourse {
 	
 	public List<CourseInstance> getCourseClasses() {
 		return this.courseClasses;
+	}
+	
+	public Boolean getPrefProfAvailable() {
+		return this.prefProfAvailable;
 	}
 	
 	// Get Property Methods
