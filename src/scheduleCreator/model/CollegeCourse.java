@@ -17,6 +17,7 @@ public class CollegeCourse {
 	private final StringProperty prefProf;
 	
 	private List<CourseInstance> courseClasses;
+	
 	public CollegeCourse(CollegeCourseBuilder builder) {
 		this.courseDepartment = builder.courseDepartment;
 		this.courseNumber = builder.courseNumber;
@@ -28,19 +29,23 @@ public class CollegeCourse {
 	
 	// Setters
 	
-	public void setCourseDepartment(String courseDepartment){
+	public void setCourseDepartment(String courseDepartment) {
 		this.courseDepartment.set(courseDepartment);
 	}
 	
-	public void setCourseNumber(String courseNumber){
+	public void setCourseNumber(String courseNumber) {
 		this.courseNumber.set(courseNumber);
 	}
-	public void setCourseName(String courseName){
+	public void setCourseName(String courseName) {
 		this.courseName.set(courseName);
 	}
 	
-	public void setPrefProf(String prefProf){
+	public void setPrefProf(String prefProf) {
 		this.prefProf.set(prefProf);
+	}
+	
+	public void setCourseClasses(String[] classes) {
+		this.courseClasses = classes);
 	}
 		
 	// Getters
@@ -66,7 +71,7 @@ public class CollegeCourse {
 	}
 	
 	public List<CourseInstance> getCourseClasses() {
-		return this.courseClasses;
+		return this.classes
 	}
 	
 	// Get Property Methods
