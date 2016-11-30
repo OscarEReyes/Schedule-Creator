@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
@@ -29,9 +29,9 @@ public class PreferenceDialogController {
 	@FXML
 	private CheckBox oneDay;
 	@FXML 
-	private ChoiceBox<String> startTime; 
+	private ComboBox<String> startTime; 
 	@FXML
-	private ChoiceBox<String> endTime;
+	private ComboBox<String> endTime;
 	@FXML
 	private Button confirm;
 	@FXML
@@ -82,8 +82,8 @@ public class PreferenceDialogController {
   	startTimeList.add("8:00pm");
   	startTimeList.add("9:00pm");
     ObservableList<String> obEndTimeList = FXCollections.observableList(startTimeList);
-    startTime.getItems().clear();
-    startTime.setItems(obEndTimeList);
+    endTime.getItems().clear();
+    endTime.setItems(obEndTimeList);
   	
 	}
 
@@ -164,7 +164,8 @@ public class PreferenceDialogController {
 			errorMessage += "No valid start time or end time!"; 
 		}
 		
-		if (MWF.isSelected() || TR.isSelected() || MW.isSelected() || oneDay.isSelected()) {
+		if (MWF.isSelected() == true || TR.isSelected() == true || 
+				MW.isSelected() == true || oneDay.isSelected() == true) {
 			errorMessage += "No day preference selected!";
 		}
 		
