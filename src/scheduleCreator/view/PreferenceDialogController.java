@@ -164,8 +164,8 @@ public class PreferenceDialogController {
 			errorMessage += "No valid start time or end time!"; 
 		}
 		
-		if (MWF.isSelected() == true || TR.isSelected() == true || 
-				MW.isSelected() == true || oneDay.isSelected() == true) {
+		if (MWF.isSelected() == false && TR.isSelected() == false &&
+				MW.isSelected() == false && oneDay.isSelected() == false) {
 			errorMessage += "No day preference selected!";
 		}
 		
