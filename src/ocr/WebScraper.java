@@ -2,21 +2,27 @@ package ocr;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
-
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.Select;
 
 import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.view.LoginDialogController.User;
+import scheduleCreator.view.SemesterDialogController.Semester;
+
 
 
 public class WebScraper {
@@ -29,6 +35,67 @@ public class WebScraper {
    * @return File - an image that will be used to perform OCR and get the classes for a course
    * @throws IOException
    */
+	public File scrapeCoursePage(User user, CollegeCourse course, Semester semester) throws IOException{
+	// Set-up PhantomJS
+			Capabilities caps = new DesiredCapabilities();
+			((DesiredCapabilities) caps).setJavascriptEnabled(true);                
+			((DesiredCapabilities) caps).setCapability("takesScreenshot", true);  
+			((DesiredCapabilities) caps).setCapability(
+					PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+					"C:\\PhantomJs\\bin\\phantomjs.exe"
+					);
+
+			// Initialize WebDriver 
+			WebDriver driver = new  PhantomJSDriver(caps);
+
+			JavascriptExecutor js;
+			if (driver instanceof JavascriptExecutor) {
+				js = (JavascriptExecutor)driver;
+			} else {
+				throw new IllegalStateException("This driver does not support JavaScript!");
+			}
+
+			// Set size of window (Affects Screenshot size)
+			Dimension dimension = new Dimension(1800, 1000);
+			driver.manage().window().setSize(dimension);
+
+			// Access blue gold website
+			driver.get("https://as2.tamuk.edu:9203/PROD/twbkwbis.P_WWWLogin");
+
+			// Find the login input elements by their name
+			WebElement element = driver.findElement(By.name("sid"));
+			WebElement pin = driver.findElement(By.name("PIN"));
+
+			// Enter login information
+			element.sendKeys(user.getUsername());
+			pin.sendKeys(user.getPassword());
+
+			// Submit Login information
+			element.submit();
+			System.out.println("Page title is: " + driver.getTitle());
+
+			driver.findElement(By.linkText("Registration")).click();  	
+			driver.findElement(By.cssSelector("a[href*='.p_sel_crse_search']")).click();
+
+			HashMap<String, String> codeMap = new HashMap<String, String>(); 
+			codeMap.put("Fall", "10");
+			codeMap.put("Winter Intersession", "15");
+			codeMap.put("Spring Intersession", "25");
+			codeMap.put("Summer Intersession", "35");
+			codeMap.put("Summer", "30");
+			codeMap.put("Spring", "20");
+
+			// Select Semester term
+			new Select(driver.findElement(By.name("p_term"))).selectByValue(semester.getYear() + codeMap.get(semester.getSeason()).toString());
+
+			driver.findElement(By.xpath("//input[3]")).click(); 
+
+			File imageFile = getImageFromPage(driver, course, js);
+			
+			driver.quit();
+			return imageFile;
+		}
+
 	public File getImageFromPage(WebDriver driver, CollegeCourse course, JavascriptExecutor js)
 			throws IOException{
 		
@@ -180,8 +247,7 @@ public class WebScraper {
 	 */
 	public File getImage(WebDriver driver) throws IOException{
 		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-		String imgDir = "C:\\Users\\oscarjr\\Documents\\College Work" + 
-				"\\Honors Contract\\Fall 2016\\tempPic";
+		String imgDir = "\\tempPic\\screenshot.png";
 
 		FileUtils.copyFile(scrFile, new File(imgDir));
 		File imageFile = new File(imgDir);
