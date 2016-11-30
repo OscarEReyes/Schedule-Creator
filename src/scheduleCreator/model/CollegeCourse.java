@@ -44,8 +44,8 @@ public class CollegeCourse {
 		this.prefProf.set(prefProf);
 	}
 	
-	public void setCourseClasses(String[] classes) {
-		this.courseClasses = classes);
+	public void setCourseClasses(List<CourseInstance> classes) {
+		this.courseClasses = classes;
 	}
 		
 	// Getters
