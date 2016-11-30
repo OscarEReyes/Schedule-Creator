@@ -228,7 +228,7 @@ public class WebScraper {
 		rows.removeIf(e -> (e.findElements(By.tagName("td")).size() < 10));
 
 		String script = "arguments[0].parentNode.removeChild(arguments[0])";
-		int[] columnsToDelete = {2,5,6,7,8,12,13,15,16,17};
+		int[] columnsToDelete = {2,3,5,6,7,8,12,13,15,16,17};
 
 		// Iterate over each row and delete the unnecessary columns
 		for (WebElement e: rows) {
