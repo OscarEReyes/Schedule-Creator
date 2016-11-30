@@ -17,7 +17,7 @@ public class CollegeCourse {
 	private final StringProperty prefProf;
 	
 	private List<CourseInstance> courseClasses;
-	private boolean prefProfAvailable;
+	private boolean prefProfAvailable = false;
 	
 	public CollegeCourse(CollegeCourseBuilder builder) {
 		this.courseDepartment = builder.courseDepartment;
