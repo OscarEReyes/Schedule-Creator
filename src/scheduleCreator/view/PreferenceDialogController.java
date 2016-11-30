@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 public class PreferenceDialogController {
@@ -46,6 +47,11 @@ public class PreferenceDialogController {
 	 */
 	@FXML
 	private void initialize() {
+		
+		ToggleGroup startToggle = new ToggleGroup();
+		
+		startEarly.setToggleGroup(startToggle);
+		finishEarly.setToggleGroup(startToggle);
   	List<String> startTimeList = new ArrayList<String>();
   	startTimeList.add("7:00am");
   	startTimeList.add("8:00am");
