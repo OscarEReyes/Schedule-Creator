@@ -19,6 +19,10 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.Select;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import scheduleCreator.model.CollegeCourse;
 import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.SemesterDialogController.Semester;
@@ -26,7 +30,17 @@ import scheduleCreator.view.SemesterDialogController.Semester;
 
 
 public class WebScraper {
-
+	
+	private Stage dialogStage;
+	/**
+	 * Sets this dialog's stage.
+	 * 
+	 * @param dialogStage
+	 */
+	public void setDialogStage(Stage dialogStage) {
+		this.dialogStage = dialogStage;
+	}
+	
   /**
    * A method that will scrape the Blue & Gold website for the list of classes of a course.
    * @param driver
@@ -102,39 +116,50 @@ public class WebScraper {
 		List<WebElement> subject;
 		subject = driver.findElements(By.name("sel_subj"));
 		
-		// Retrieves the element that is displayed
-		for (WebElement elem: subject){
-			if (elem.isDisplayed() == true) {
-				new Select(elem).selectByValue(course.getCourseDepartment());	
+		try { 
+			// Retrieves the element that is displayed
+			for (WebElement elem: subject){
+				if (elem.isDisplayed() == true) {
+					new Select(elem).selectByValue(course.getCourseDepartment());	
+				}
 			}
+	
+			driver.findElement(By.xpath("//input[18]")).click();
+	
+			// Look for table display with the text equal to the course name
+			// Use it to get its parent and then select the right submit button  
+			String textPath = "//td[contains(text(),'" + course.getCourseName() +  "')]";
+			String returnScript = "return arguments[0].parentNode;";
+			WebElement elem = driver.findElement(By.xpath(textPath));
+	
+			WebElement parentElement = (WebElement)js.executeScript(returnScript, elem);
+	
+			parentElement.findElement(By.name("SUB_BTN")).click();
+	
+			// Get the table of classes
+			elem = driver.findElement(By.className("datadisplaytable"));
+			WebElement table = elem.findElement(By.tagName("tbody"));
+			
+			// Clean up page by deleting unnecessary rows, columns, and trivial text
+			cleanRows(table, js);
+			cleanColumns(table, js);
+			delExtraText(js, driver, elem);
+			List<WebElement> l = table.findElements(By.tagName("tr"));
+	
+			// Resize page text
+			resizeText(js, driver, l);
+			File imageFile = getImage(driver);
+			return imageFile;
+		} catch (org.openqa.selenium.NoSuchElementException e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.initOwner(dialogStage);
+			alert.setTitle("Department or Course Not Found");
+			alert.setContentText("ERROR");
+
+			// Show error message window and wait for a response.
+			alert.showAndWait();
+			return null;
 		}
-
-		driver.findElement(By.xpath("//input[18]")).click();
-
-		// Look for table display with the text equal to the course name
-		// Use it to get its parent and then select the right submit button  
-		String textPath = "//td[contains(text(),'" + course.getCourseName() +  "')]";
-		String returnScript = "return arguments[0].parentNode;";
-		WebElement elem = driver.findElement(By.xpath(textPath));
-
-		WebElement parentElement = (WebElement)js.executeScript(returnScript, elem);
-
-		parentElement.findElement(By.name("SUB_BTN")).click();
-
-		// Get the table of classes
-		elem = driver.findElement(By.className("datadisplaytable"));
-		WebElement table = elem.findElement(By.tagName("tbody"));
-		
-		// Clean up page by deleting unnecessary rows, columns, and trivial text
-		cleanRows(table, js);
-		cleanColumns(table, js);
-		delExtraText(js, driver, elem);
-		List<WebElement> l = table.findElements(By.tagName("tr"));
-
-		// Resize page text
-		resizeText(js, driver, l);
-		File imageFile = getImage(driver);
-		return imageFile;
 }
 	
 	/**
@@ -228,7 +253,7 @@ public class WebScraper {
 		rows.removeIf(e -> (e.findElements(By.tagName("td")).size() < 10));
 
 		String script = "arguments[0].parentNode.removeChild(arguments[0])";
-		int[] columnsToDelete = {2,3,5,6,7,8,12,13,15,16,17};
+		int[] columnsToDelete = {2,3,5,6,7,8,12,13,15,16,17,19};
 
 		// Iterate over each row and delete the unnecessary columns
 		for (WebElement e: rows) {
