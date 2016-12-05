@@ -17,9 +17,14 @@ import javafx.stage.Stage;
 import ocr.ImageAnalyzer;
 import ocr.WebScraper;
 import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.model.CourseInstance;
+import scheduleCreator.model.Schedule;
+import scheduleCreator.model.SchedulePlanner;
 import scheduleCreator.view.CourseEditDialogController;
 import scheduleCreator.view.LoginDialogController;
 import scheduleCreator.view.LoginDialogController.User;
+import scheduleCreator.view.PreferenceDialogController;
+import scheduleCreator.view.PreferenceDialogController.Preferences;
 import scheduleCreator.view.ScheduleOverviewController;
 import scheduleCreator.view.SemesterDialogController;
 import scheduleCreator.view.SemesterDialogController.Semester;
@@ -30,6 +35,7 @@ public class MainApp extends Application {
 	private ObservableList<CollegeCourse> CollegeCourseData = FXCollections.observableArrayList();
 	private User user;
 	private Semester semester;
+	private Preferences preferences;
 
 	/**
 	 * Constructor
@@ -91,13 +97,14 @@ public class MainApp extends Application {
 			// Give mainApp access to the ScheduleOverviewController class.   
 			ScheduleOverviewController controller = loader.getController();   
 			controller.setMainApp(this);  
-			
+
 			do {
 				user = showLoginDialog();
 				semester = showSemesterDialog();
-				
+
 			} while (user == null || semester == null);
-			
+
+			preferences = showPreferencesDialog();
 		} catch (IOException e) {  
 			e.printStackTrace();
 		}
@@ -229,17 +236,49 @@ public class MainApp extends Application {
 			return null;
 		}
 	}
-	
-	public String[] getCourseClasses(CollegeCourse course) throws IOException, InterruptedException{
-		List<String> courseClassesList = new ArrayList<String>();
-		File imageFile;
-		String results;
-		WebScraper scraper = new WebScraper();
-		ImageAnalyzer imAn = new ImageAnalyzer();
-		imageFile = scraper.scrapeCoursePage(user, course, semester);
-		results = imAn.analyzeImage(imageFile);
-		String[] classes = results.split("\\r?\\n");
-		return classes;
+
+	/**
+	 *  Opens a semester prompt for the user to input his preferences
+	 *  @return Preferences object
+	 */
+	public Preferences showPreferencesDialog() {
+		try{
+			// Load the Semester dialog fxml file 
+			// Create a new stage for the dialog.
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			fxmlLoader.setLocation(MainApp.class.getResource("view/PreferenceDialog.fxml"));
+			AnchorPane preferenceDialog = (AnchorPane) fxmlLoader.load();
+
+			// Create the dialog Stage
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Edit Your Preferences");
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(primaryStage);
+
+			// Create Scene and set scene
+			Scene scene = new Scene(preferenceDialog);
+			dialogStage.setScene(scene);
+
+			// Set the controller
+			PreferenceDialogController controller = fxmlLoader.getController();
+			controller.setDialogStage(dialogStage);
+
+			// Show the dialog and wait until the user closes it
+			dialogStage.showAndWait();
+			return controller.getPreferences();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
+	
+	public void generateSchedule() throws IOException, InterruptedException {
+		SchedulePlanner sp = new SchedulePlanner.SchedulePlannerBuilder(preferences)
+				.user(user)
+				.semester(semester)
+				.build();
+		sp.generateSchedule(CollegeCourseData);
+	}
+
 	
 }
