@@ -24,20 +24,42 @@ public class SchedulePlanner {
 		this.user = builder.user;
 		this.semester = builder.semester;
 		this.preferences = builder.preferences;
-		hourMap.put("8:00 am", 8);
-		hourMap.put("9:00 am", 9);
+		hourMap.put("08:00 am", 8);
+		hourMap.put("08:50 am", 8);
+		hourMap.put("09:00 am", 9);
+		hourMap.put("09:15 am", 9);
+		hourMap.put("09:30 am", 9);
+		hourMap.put("09:50 am", 9);
 		hourMap.put("10:00 am", 10);
+		hourMap.put("10:15 am", 10);
+		hourMap.put("10:30 am", 10);
+		hourMap.put("10:50 am", 10);
 		hourMap.put("11:00 am", 11);
+		hourMap.put("11:15 am", 11);
+		hourMap.put("11:30 am", 11);
+		hourMap.put("11:50 am", 11);
 		hourMap.put("12:00 pm", 12);
-		hourMap.put("1:00 pm", 13);
-		hourMap.put("2:00 am", 14);
-		hourMap.put("3:00 am", 15);
-		hourMap.put("4:00 am", 16);
-		hourMap.put("5:00 am", 17);
-		hourMap.put("6:00 pm", 18);
-		hourMap.put("7:00 pm", 19);
-		hourMap.put("8:00 pm", 20);
-		hourMap.put("9:00 pm", 21);
+		hourMap.put("12:15 pm", 12);
+		hourMap.put("12:30 pm", 12);
+		hourMap.put("12:50 pm", 12);
+		hourMap.put("01:00 pm", 13);
+		hourMap.put("01:15 pm", 13);
+		hourMap.put("01:30 pm", 13);
+		hourMap.put("01:50 pm", 13);
+		hourMap.put("02:30 pm", 14);
+		hourMap.put("02:00 pm", 14);
+		hourMap.put("02:50 pm", 14);
+		hourMap.put("03:00 pm", 15);
+		hourMap.put("03:30 pm", 15);
+		hourMap.put("03:50 pm", 15);
+		hourMap.put("04:00 pm", 16);
+		hourMap.put("04:45 pm", 16);
+		hourMap.put("04:50 pm", 16);
+		hourMap.put("05:00 pm", 17);
+		hourMap.put("05:50 pm", 17);
+		hourMap.put("06:00 pm", 18);
+		hourMap.put("08:50 pm", 20);
+		hourMap.put("09:00 pm", 21);
 	}
 
 	public void generateSchedule(ObservableList<CollegeCourse> collegeCourseData) throws IOException, InterruptedException {
@@ -46,14 +68,18 @@ public class SchedulePlanner {
 			String[] classes = getCourseClasses(course);
 			List<CourseInstance> courseClasses = new ArrayList<CourseInstance>();
 			for (String c : classes) {
-				if (c.length() > 1 && c.charAt(0) != 'C' && Character.isDigit(c.charAt(9))) {
+				System.out.println(c);
+				if (c.length() > 1 && !c.substring(0,1).equals("C") && Character.isDigit(c.charAt(9))) {
 					CourseInstance courseClass = createCourseInstance(c, course);
-					String startTime = courseClass.getSchedule().getClassHours().substring(0,8);
-					String endTime = courseClass.getSchedule().getClassHours().substring(9);
+					String startTime;
+					startTime = courseClass.getSchedule().getClassHours().substring(0,8);
+					String endTime;
+					endTime = courseClass.getSchedule().getClassHours().substring(9);				
 					
 					if (hourMap.get(startTime) >= hourMap.get(preferences.getStartTime()) &&
 							hourMap.get(endTime) >= hourMap.get(preferences.getEndTime())) {
-						if (courseClass.getClassProf() == course.getPrefProf()) {
+						
+						if (courseClass.getClassProf().equals(course.getPrefProf())) {
 							course.setPrefProfAvailable(true);
 						}
 						courseClasses.add(courseClass);
@@ -63,35 +89,97 @@ public class SchedulePlanner {
 
 			course.setCourseClasses(courseClasses);
 		}
+		makeSchedule(collegeCourseData);
 
 	}
 	public void makeSchedule(ObservableList<CollegeCourse> collegeCourseData) {
+		List<CourseInstance> scheduledClasses = new ArrayList<CourseInstance>();
 		List<CollegeCourse> priorityCourses = new ArrayList<CollegeCourse>();
+		List<CollegeCourse> highPriorityCourses = new ArrayList<CollegeCourse>();
 		List<CollegeCourse> medPriorityCourses = new ArrayList<CollegeCourse>();
 		List<CollegeCourse> lowPriorityCourses = new ArrayList<CollegeCourse>();
-
+		
+		List<ScheduleDay> takenTimes = new ArrayList<ScheduleDay>();
 		for (CollegeCourse course: collegeCourseData) {
 			int courseClassesSize = course.getCourseClasses().size();
-			if (course.getPrefProfAvailable() == true || courseClassesSize == 1) {
+			if (course.getPrefProfAvailable() == true) {
 				priorityCourses.add(course);
+			} else if (courseClassesSize == 1){
+				highPriorityCourses.add(course);
 			}else if (courseClassesSize >= 2 && courseClassesSize <= 4) {
 				medPriorityCourses.add(course);
 			} else {
 				lowPriorityCourses.add(course);
 			}
 		}
+		
+		scheduledClasses = lookForClass(highPriorityCourses, takenTimes, scheduledClasses);
+
+		for (CollegeCourse course: priorityCourses) {
+			for (CourseInstance courseClass: course.getCourseClasses()) {
+				String startTime = courseClass.getSchedule().getClassHours().substring(0,8);
+				String endTime = courseClass.getSchedule().getClassHours().substring(9);
+				
+				int sTime = hourMap.get(startTime);
+				int eTime = hourMap.get(endTime);
+				if (courseClass.getClassProf().equals(course.getPrefProf()) &&
+						takenTimes.size() == 0 || timeConflictExists(takenTimes, sTime, eTime,
+								courseClass.getSchedule().getClassDays()) == false) {
+						scheduledClasses.add(courseClass);
+						takenTimes.add(new ScheduleDay(courseClass.getSchedule().getClassDays(), sTime, eTime));
+
+				}
+				scheduledClasses = lookForClass(medPriorityCourses, takenTimes, scheduledClasses);
+				scheduledClasses = lookForClass(lowPriorityCourses, takenTimes, scheduledClasses);
+
+			}
+		}
+		
+		for (CourseInstance courseClass: scheduledClasses) {
+			System.out.println(courseClass.getClassCrn());
+		}
 	}
+	
+	public List<CourseInstance> lookForClass(List<CollegeCourse> courses, 
+			List<ScheduleDay> takenTimes, List<CourseInstance> scheduledClasses) {
+		for (CollegeCourse course: courses) {
+			for (CourseInstance courseClass: course.getCourseClasses()) {
+				String startTime = courseClass.getSchedule().getClassHours().substring(0,8);
+				String endTime = courseClass.getSchedule().getClassHours().substring(9);
+				
+				int sTime = hourMap.get(startTime);
+				int eTime = hourMap.get(endTime);
+				if (takenTimes.size() == 0 || timeConflictExists(takenTimes, sTime, eTime,
+						courseClass.getSchedule().getClassDays()) == false) {
+						scheduledClasses.add(courseClass);
+						takenTimes.add(new ScheduleDay(courseClass.getSchedule().getClassDays(), sTime, eTime));
+				}
+			}
+		}
+		return scheduledClasses;
+	}
+	
+	public boolean timeConflictExists(List<ScheduleDay> takenTimes, int startTime, int endTime, String days) {
+		for (ScheduleDay sDay: takenTimes) {
+			if ((sDay.getStartTime() >= startTime && sDay.getEndTime() <= endTime) &&
+					sDay.getDays().equals(days)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	public CourseInstance createCourseInstance(String c, CollegeCourse course) {
 		String crn = c.substring(3, 8);
 		String section = c.substring(9, 12);
 		String days = c.substring(13,16);
-		String hours = c.substring(17,34);
-		String spacesLeft = c.substring(35, c.indexOf(" ", 36));
-		String prof = c.substring(c.indexOf(" ", 36) ,c.indexOf("(", 40) - 1);
-		String date = c.substring(c.indexOf("(", 40) - 1, c.indexOf("-", 40) + 6);
-		String location = c.substring(c.indexOf("-", 40) + 8);
+		String hours = c.substring(c.indexOf(" ", 13) + 1 ,c.indexOf("m", 25) + 1);
+		String prof = c.substring(c.indexOf(" ", 36) + 1 , c.indexOf("(", 40) - 1);
+		String location = c.substring(c.indexOf(")") + 2);
+		String spacesLeft = c.substring(c.indexOf("m", 25) + 2, c.indexOf(" ", 35));
 
+		System.out.println("Class: " + crn + " " + section + " " + days + " " + hours + " " + prof + " " + location + " spaces left: " + spacesLeft );
 		CourseInstance courseClass = new CourseInstance.
 				CourseInstanceBuilder(new Schedule(days ,hours, location))
 				.classCrn(crn)
@@ -108,9 +196,13 @@ public class SchedulePlanner {
 		WebScraper scraper = new WebScraper();
 		ImageAnalyzer imAn = new ImageAnalyzer();
 		imageFile = scraper.scrapeCoursePage(user, course, semester);
-		results = imAn.analyzeImage(imageFile);
-		String[] classes = results.split("\\r?\\n");
-		return classes;
+		if (imageFile != null) {
+			results = imAn.analyzeImage(imageFile);
+			String[] classes = results.split("\\r?\\n");
+			return classes;
+		} else {
+			return null;
+		}
 	}
 
 	public static class SchedulePlannerBuilder {
@@ -123,12 +215,12 @@ public class SchedulePlanner {
 			this.preferences = preferences;
 		}
 
-		public SchedulePlannerBuilder courseDepartment(User user){
+		public SchedulePlannerBuilder user(User user){
 			this.user = user;
 			return this;
 		}
 
-		public SchedulePlannerBuilder courseNumber(Semester semester){
+		public SchedulePlannerBuilder semester(Semester semester){
 			this.semester = semester;
 			return this;
 		}
@@ -137,5 +229,30 @@ public class SchedulePlanner {
 		public SchedulePlanner build(){
 			return new SchedulePlanner(this);
 		}
+	}
+	
+	private class ScheduleDay {
+		private final String days;
+		private final int startTime;
+		private final int endTime;
+		
+		ScheduleDay(String days, int startTime, int endTime) {
+			this.days = days;
+			this.startTime = startTime;
+			this.endTime = endTime;
+		}
+		
+		public String getDays() {
+			return days;
+		}
+		
+		public int getStartTime() {
+			return startTime;
+		}
+		
+		public int getEndTime() {
+			return endTime;
+		}
+		
 	}
 }
