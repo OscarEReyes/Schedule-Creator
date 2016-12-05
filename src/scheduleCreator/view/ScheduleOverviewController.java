@@ -1,6 +1,8 @@
 package scheduleCreator.view;
 
 	
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -10,6 +12,8 @@ import javafx.scene.control.TableView;
 import scheduleCreator.MainApp;
 import scheduleCreator.model.CollegeCourse;
 import scheduleCreator.model.Schedule;
+import scheduleCreator.view.LoginDialogController.User;
+import scheduleCreator.view.SemesterDialogController.Semester;
 
 public class ScheduleOverviewController {
 	@FXML
@@ -44,19 +48,21 @@ public class ScheduleOverviewController {
      */
 	@FXML
 	private void initialize() {
-	// Initialize the Schedule table with the two columns.
-	courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().courseNameProperty());
+		// Initialize the Schedule table with its column.
+		courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().courseNameProperty());
+		
+		 // Clear the CollegeCourse Information.
+	    showCollegeCourseDetails(null);
 	
-	 // Clear the CollegeCourse Information.
-    showCollegeCourseDetails(null);
-
-    // "Listen" for selection changes and display the selected course's details
-    // when selection is changed
-    
-    CourseTable.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldValue, newValue) -> showCollegeCourseDetails(newValue));
+	    // "Listen" for selection changes and display the selected course's details
+	    // when selection is changed
+	    
+	    
+	    CourseTable.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> showCollegeCourseDetails(newValue));
 	}
 
+	
 	/**
 	 * Gives the mainApp a reference to itself when called by mainApp
 	 * 
@@ -68,6 +74,7 @@ public class ScheduleOverviewController {
 	    // Add observable list data to the table
 	    CourseTable.setItems(mainApp.getCollegeCourseData());
 	}
+	
 	
 	/**
 	 * Fills every text field to display information about the college course.
@@ -118,9 +125,9 @@ public class ScheduleOverviewController {
 	 */
 	@FXML
 	private void handleNewCollegeCourse() {
-	    CollegeCourse tempCollegeCourse = new CollegeCourse.CollegeCourseBuilder("")
-	    		.courseDepartment(" ")
-	    		.courseNumber(" ")
+	    CollegeCourse tempCollegeCourse = new CollegeCourse.CollegeCourseBuilder("Course")
+	    		.courseDepartment("")
+	    		.courseNumber("0000")
 	    		.build();
 	    
 	    boolean confirmedClicked = mainApp.showCollegeCourseEditDialog(tempCollegeCourse);
@@ -152,5 +159,17 @@ public class ScheduleOverviewController {
 	        alert.showAndWait();
 	    }
 	}
+	
+	/**
+	 * Called when the user clicks the generate schedule button. 
+	 * @throws IOException 
+	 * @throws InterruptedException 
+	 */
+	@FXML
+	private void handleGenerateSchedule() throws IOException, InterruptedException {	  
+		mainApp.generateSchedule();
+	}
+	
+
 }
 
