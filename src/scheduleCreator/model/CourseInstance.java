@@ -32,6 +32,14 @@ public class CourseInstance {
 		return this.classProf;
 	}
 	
+	public int getStartTime() {
+		return this.schedule.getStartTime();
+	}
+	
+	public int getEndTime() {
+		return this.schedule.getEndTime();
+	}
+	
 	public CollegeCourse getCourseInfo() {
 		return this.courseInfo;
 	}
