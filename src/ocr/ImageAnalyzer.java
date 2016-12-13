@@ -14,6 +14,7 @@ public class ImageAnalyzer {
 		try {
 			instance.setDatapath("C:\\Users\\oscarjr\\Documents\\Programming\\workspace\\scheduleCreator\\tessdata");
 			String result = instance.doOCR(imageFile);
+			System.out.println(result);
 			return result;
 		} catch (TesseractException e){
 			System.err.println(e.getMessage());

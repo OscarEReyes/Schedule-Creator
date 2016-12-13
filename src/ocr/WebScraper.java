@@ -23,7 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.model.Course;
 import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.SemesterDialogController.Semester;
 
@@ -49,7 +49,7 @@ public class WebScraper {
    * @return File - an image that will be used to perform OCR and get the classes for a course
    * @throws IOException
    */
-	public File scrapeCoursePage(User user, CollegeCourse course, Semester semester) throws IOException{
+	public File scrapeCoursePage(User user, Course course, Semester semester) throws IOException{
 	// Set-up PhantomJS
 			Capabilities caps = new DesiredCapabilities();
 			((DesiredCapabilities) caps).setJavascriptEnabled(true);                
@@ -110,7 +110,7 @@ public class WebScraper {
 			return imageFile;
 		}
 
-	public File getImageFromPage(WebDriver driver, CollegeCourse course, JavascriptExecutor js)
+	public File getImageFromPage(WebDriver driver, Course course, JavascriptExecutor js)
 			throws IOException{
 		
 		List<WebElement> subject;
