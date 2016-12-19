@@ -5,7 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.model.Course;
 
 
 /*
@@ -23,7 +23,7 @@ public class CourseEditDialogController {
 	private TextField prefProfField;
 	
 	private Stage dialogStage;
-	private CollegeCourse course;
+	private Course course;
 	private Boolean confirmClicked = false;
 	
 	/**
@@ -50,7 +50,7 @@ public class CourseEditDialogController {
      * 
      * @param course
      */
-    public void setCourse(CollegeCourse course) {
+    public void setCourse(Course course) {
         this.course = course;
 
         courseDepartmentField.setText(course.getCourseDepartment());

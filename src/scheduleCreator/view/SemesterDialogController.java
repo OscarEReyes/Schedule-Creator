@@ -1,21 +1,12 @@
 package scheduleCreator.view;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import scheduleCreator.view.LoginDialogController.User;
 
 public class SemesterDialogController {
 	@FXML

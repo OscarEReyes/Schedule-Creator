@@ -10,16 +10,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import scheduleCreator.MainApp;
-import scheduleCreator.model.CollegeCourse;
+import scheduleCreator.model.Course;
 import scheduleCreator.model.Schedule;
 import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.SemesterDialogController.Semester;
 
 public class ScheduleOverviewController {
 	@FXML
-	private TableView<CollegeCourse> CourseTable;
+	private TableView<Course> CourseTable;
     @FXML
-    private TableColumn<CollegeCourse, String> courseNameColumn;
+    private TableColumn<Course, String> courseNameColumn;
 
     @FXML
     private Label courseLabel;
@@ -82,7 +82,7 @@ public class ScheduleOverviewController {
 	 * 
 	 * @param collegecourse or null
 	 */
-	private void showCollegeCourseDetails(CollegeCourse course) {
+	private void showCollegeCourseDetails(Course course) {
 	    if (course != null) {
 	        // Fill the labels with info from the course object.
 	        courseLabel.setText(course.getCourseDepartment() + 
@@ -125,7 +125,7 @@ public class ScheduleOverviewController {
 	 */
 	@FXML
 	private void handleNewCollegeCourse() {
-	    CollegeCourse tempCollegeCourse = new CollegeCourse.CollegeCourseBuilder("Course")
+	    Course tempCollegeCourse = new Course.CollegeCourseBuilder("Course")
 	    		.courseDepartment("")
 	    		.courseNumber("0000")
 	    		.build();
@@ -143,7 +143,7 @@ public class ScheduleOverviewController {
 	 */
 	@FXML
 	private void handleEditCollegeCourse() {
-	    CollegeCourse selectedCourse = CourseTable.getSelectionModel().getSelectedItem();
+	    Course selectedCourse = CourseTable.getSelectionModel().getSelectedItem();
 	    if (selectedCourse != null) {
 	        boolean confirmedClicked = mainApp.showCollegeCourseEditDialog(selectedCourse);
 	        if (confirmedClicked) {
