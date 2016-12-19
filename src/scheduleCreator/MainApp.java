@@ -16,8 +16,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ocr.ImageAnalyzer;
 import ocr.WebScraper;
-import scheduleCreator.model.CollegeCourse;
-import scheduleCreator.model.CourseInstance;
+import scheduleCreator.model.Course;
+import scheduleCreator.model.CourseClass;
 import scheduleCreator.model.Schedule;
 import scheduleCreator.model.SchedulePlanner;
 import scheduleCreator.view.CourseEditDialogController;
@@ -32,7 +32,7 @@ import scheduleCreator.view.SemesterDialogController.Semester;
 public class MainApp extends Application {
 	private Stage primaryStage;
 	private BorderPane rootLayout;
-	private ObservableList<CollegeCourse> CollegeCourseData = FXCollections.observableArrayList();
+	private ObservableList<Course> CollegeCourseData = FXCollections.observableArrayList();
 	private User user;
 	private Semester semester;
 	private Preferences preferences;
@@ -48,7 +48,7 @@ public class MainApp extends Application {
 	 * Returns the data as an observable list of CollegeCourses. 
 	 * @return
 	 */
-	public ObservableList<CollegeCourse> getCollegeCourseData() {
+	public ObservableList<Course> getCollegeCourseData() {
 		return CollegeCourseData;
 	}
 
@@ -131,10 +131,10 @@ public class MainApp extends Application {
 	 * into the passed CollegeCourse object and 
 	 * true is returned.
 	 * 
-	 * @param CollegeCourse -  the CollegeCourse object to be edited
+	 * @param collegeCourse -  the CollegeCourse object to be edited
 	 * @return true if the user clicked the Confirm button, otherwise false
 	 */
-	public boolean showCollegeCourseEditDialog(CollegeCourse collegeCourse) {
+	public boolean showCollegeCourseEditDialog(Course collegeCourse) {
 		try {
 			// Load the course edit dialog fxml file 
 			// Create a new stage for the dialog.
@@ -277,7 +277,13 @@ public class MainApp extends Application {
 				.user(user)
 				.semester(semester)
 				.build();
-		sp.generateSchedule(CollegeCourseData);
+		try {
+			sp.genSchedule(CollegeCourseData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	
