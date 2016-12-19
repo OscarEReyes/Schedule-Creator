@@ -1,9 +1,6 @@
 package scheduleCreator;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -14,11 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ocr.ImageAnalyzer;
-import ocr.WebScraper;
 import scheduleCreator.model.Course;
-import scheduleCreator.model.CourseClass;
-import scheduleCreator.model.Schedule;
 import scheduleCreator.model.SchedulePlanner;
 import scheduleCreator.view.CourseEditDialogController;
 import scheduleCreator.view.LoginDialogController;
