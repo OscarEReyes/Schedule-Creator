@@ -40,6 +40,10 @@ public class CourseClass {
 		return this.schedule.getEndTime();
 	}
 	
+	public String getDays() { 
+		return this.getSchedule().getClassDays();
+	}
+	
 	public Course getCourseInfo() {
 		return this.courseInfo;
 	}
