@@ -8,10 +8,15 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import exceptions.FullClassException;
+import exceptions.InvalidSectionException;
+import exceptions.NullClassFieldException;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import ocr.ImageAnalyzer;
 import ocr.WebScraper;
-
+import scheduleCreator.MainApp;
 import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.PreferenceDialogController.Preferences;
 import scheduleCreator.view.SemesterDialogController.Semester;
@@ -35,7 +40,8 @@ public class SchedulePlanner {
 	 * @throws InterruptedException
 	 */
 	public List<CourseClass> genSchedule(ObservableList<Course> courseList) 
-			throws IOException, InterruptedException {
+			throws IOException, 
+			InterruptedException {
 		for (Course course: courseList) {
 			List<CourseClass> classList = new ArrayList<CourseClass>();
 			String[] classes = getCourseClasses(course);
@@ -56,12 +62,39 @@ public class SchedulePlanner {
 	 * @param course
 	 */
 	public void addOpenClasses(String[] classes, List<CourseClass> classList, Course course) {
+		int fullClassCount = 0;
+		int invalidSectionCount = 0;
+		
 		for (String c : classes) {
-			String firstLetter = c.substring(0, 1);
-			if (c.length() > 1 && !firstLetter.equals("C") && Character.isDigit(c.charAt(9))) {
-				CourseClass courseClass = createCourseInstance(c, course);		
-				classList.add(courseClass);
+			Boolean classInfoIsValid = c.length() > 1;
+			Boolean classIsNotClosed = c.charAt(1) != 'C';
+			
+			if (classInfoIsValid && classIsNotClosed) {
+				CourseClass courseClass = null;
+				try {
+					courseClass = createCourseInstance(c, course);
+				} catch (FullClassException e) {
+					fullClassCount += 1;
+				} catch (InvalidSectionException e) {
+					invalidSectionCount += 1;
+				} catch (NullClassFieldException e) {
+					e.getMessage();
+				} finally {
+					if (courseClass != null) {
+						classList.add(courseClass);
+					}
+				}
 			}
+		}
+		if (fullClassCount > 0 || invalidSectionCount > 0) {
+		  Alert alert = new Alert(AlertType.ERROR);
+      alert.initOwner(null);
+      alert.setTitle("Full and unavailable classes");
+      alert.setContentText("Full Classes: " + fullClassCount + 
+      		"\nDual-Enrollment or Honor-Roll classes: " + invalidSectionCount);
+      
+      // Show error message window and wait for a response.
+      alert.showAndWait();
 		}
 	}
 
@@ -70,10 +103,16 @@ public class SchedulePlanner {
 	 * @param classInfoString
 	 * @param course
 	 * @return CourseClass object that gets its information from the string passed.
+	 * @throws FullClassException 
+	 * @throws InvalidSectionException 
+	 * @throws NullClassFieldException 
 	 */
-	public CourseClass createCourseInstance(String classInfoString, Course course) {
-		ClassInformation cInfo = new ClassInformation(classInfoString);
-		Schedule schedule = new Schedule(cInfo.getDays() ,cInfo.getHours(), cInfo.getLocation());
+	public CourseClass createCourseInstance(String info, Course c) 
+			throws FullClassException, 
+						 InvalidSectionException,
+						 NullClassFieldException {
+		ClassInformation cInfo = new ClassInformation(info);
+		Schedule schedule = new Schedule(cInfo.getDays(), cInfo.getHours(), cInfo.getLocation());
 
 		CourseClass courseClass = new CourseClass.
 				CourseInstanceBuilder(schedule)
@@ -81,7 +120,7 @@ public class SchedulePlanner {
 				.placesLeft(cInfo.getSpacesLeft())
 				.classSection(cInfo.getSection())
 				.classProf(cInfo.getProf())
-				.courseInfo(course).build();
+				.courseInfo(c).build();
 
 		return courseClass;
 	}
@@ -233,7 +272,8 @@ public class SchedulePlanner {
 			int sDaySTime = sDay.getStartTime();
 			int sDayETime = sDay.getEndTime();
 			String sDays = sDay.getDays();
-
+			
+			Boolean startsAtOrAfterSTime = sDaySTime >= startTime && sDayETime <= endTime;
 			if ((sDaySTime >= startTime && sDayETime <= endTime) && sDays.equals(days)) {
 				return true;
 			}
@@ -319,22 +359,22 @@ public class SchedulePlanner {
 		private String location = null;
 		private int spacesLeft;
 
-		public ClassInformation(String classInfo) {
+		public ClassInformation(String classInfo) throws InvalidSectionException {
 			String noPrecedingNumbers = "(?<!\\d)";
 			String noFollowingNumbers = "(?!\\d)";
-			String precededByThreeNums = "(?<=\\d{3}\\s)";
 			String legalDaysRepr = "(\\p{Upper}{1,4})";
 			String hour = "(\\d{2}.\\d{2}\\s\\p{Lower}{2})";
 			String precededBySpacesLeft = "(?<=\\s\\d{1,2}?\\s)";
+			String precededBySpace = "(?<=\\s)";
+			String followedByHour = "(?=\\s\\d{2}.\\d{2}\\s\\p{Lower}{2})";
 			String precededByHour = "(?<=m\\s)";
 			String followedByProf = "(?=\\s\\p{Upper})";
 			String anything = ".+?";
 			String followedByProfMark = "(?=\\s\\p{Punct}P\\p{Punct})"; // "(P)"
 			String precededByProfMark = "(?<=\\s\\p{Punct}P\\p{Punct})";
-			
 			String crnPattern = noPrecedingNumbers + "\\d{5}" + noFollowingNumbers;
-			String sectionPattern = noPrecedingNumbers + "\\d{3}" + noFollowingNumbers;
-			String daysPattern = precededByThreeNums + legalDaysRepr;
+			String sectionPattern = noPrecedingNumbers + "\\p{Alnum}{3}" + noFollowingNumbers;
+			String daysPattern = precededBySpace + legalDaysRepr + followedByHour;
 			String hoursPattern = hour + "-" + hour;
 			String profPattern = precededBySpacesLeft + anything + followedByProfMark;
 			String spacesLeftPattern = precededByHour + "(\\d{1,2})" + followedByProf;
@@ -354,7 +394,12 @@ public class SchedulePlanner {
 			}
 			
 			if(sectionMatcher.find()) {
-				this.section = sectionMatcher.group();
+				try {
+					this.section = sectionMatcher.group();
+					Integer.parseInt(sectionMatcher.group());
+				} catch (NumberFormatException e) {
+					throw new InvalidSectionException(this.section);
+				}
 			}
 			
 			if(daysMatcher.find()) {
