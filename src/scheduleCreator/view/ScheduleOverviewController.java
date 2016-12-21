@@ -11,9 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import scheduleCreator.MainApp;
 import scheduleCreator.model.Course;
-import scheduleCreator.model.Schedule;
-import scheduleCreator.view.LoginDialogController.User;
-import scheduleCreator.view.SemesterDialogController.Semester;
+
 
 public class ScheduleOverviewController {
 	@FXML
