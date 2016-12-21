@@ -530,18 +530,6 @@ public class SchedulePlanner {
 			this.endTime = courseClass.getEndTime();
 			this.days = courseClass.getDays();
 		}
-
-		public String getDays() {
-			return days;
-		}
-
-		public int getStartTime() {
-			return startTime;
-		}
-
-		public int getEndTime() {
-			return endTime;
-		}
 		
 		public Boolean checkConflict(int start, int end, String d) { 
 			Boolean sameTimes = start == startTime && end == endTime;
