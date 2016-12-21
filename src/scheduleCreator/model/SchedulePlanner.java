@@ -264,23 +264,31 @@ public class SchedulePlanner {
 	 *         and an already chosen class
 	 */
 	public boolean timeConflict(List<ScheduledClass> takenTimes, CourseClass courseClass) {
-		int startTime = courseClass.getStartTime();
-		int endTime = courseClass.getEndTime();
+		int start = courseClass.getStartTime();
+		int end = courseClass.getEndTime();
 		String days = courseClass.getSchedule().getClassDays();
 
-		for (ScheduledClass sDay: takenTimes) {
-			int sDaySTime = sDay.getStartTime();
-			int sDayETime = sDay.getEndTime();
-			String sDays = sDay.getDays();
+		for (ScheduledClass sClass: takenTimes) {
+			int sDayStart = sClass.getStartTime();
+			int sDayEnd = sClass.getEndTime();
+			String sDays = sClass.getDays();
+			Boolean startsInBetween = start <= sDayStart && end > sDayEnd;
+			Boolean endsHalfway = start <= sDayEnd && end > sDayEnd;
 			
-			Boolean startsAtOrAfterSTime = sDaySTime >= startTime && sDayETime <= endTime;
-			if ((sDaySTime >= startTime && sDayETime <= endTime) && sDays.equals(days)) {
+			if (start == sDayStart && end == sDayEnd) {
+				return true;
+			}else if ((start <= sDayStart && end >= sDayEnd) && sDays.equals(days)) {
+				return true;
+			} else if (start >= sDayStart && end <= sDayEnd) {
+				return true;
+			} else if (startsInBetween || endsHalfway){
 				return true;
 			}
 		}
 
 		return false;
 	}
+	
 
 
 	/**
