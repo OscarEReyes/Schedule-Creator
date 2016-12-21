@@ -188,7 +188,7 @@ public class SchedulePlanner {
 	 * @param chosenClasses
 	 */
 	private void iterStack(Stack<Course> stack, 
-			List<ScheduledClass> takenTimes, List<CourseClass> chosenClasses){
+			List<ScheduledClass> takenTimes, List<CourseClass> chosenClasses) {
 		while (!stack.isEmpty()) {
 			CourseClass chosenClass;
 			Course tmp = stack.pop();
@@ -269,27 +269,13 @@ public class SchedulePlanner {
 		String days = courseClass.getSchedule().getClassDays();
 
 		for (ScheduledClass sClass: takenTimes) {
-			int sDayStart = sClass.getStartTime();
-			int sDayEnd = sClass.getEndTime();
-			String sDays = sClass.getDays();
-			Boolean startsInBetween = start <= sDayStart && end > sDayEnd;
-			Boolean endsHalfway = start <= sDayEnd && end > sDayEnd;
-			
-			if (start == sDayStart && end == sDayEnd) {
-				return true;
-			}else if ((start <= sDayStart && end >= sDayEnd) && sDays.equals(days)) {
-				return true;
-			} else if (start >= sDayStart && end <= sDayEnd) {
-				return true;
-			} else if (startsInBetween || endsHalfway){
+			if (sClass.checkConflict(start, end, days)) {
 				return true;
 			}
 		}
-
 		return false;
 	}
 	
-
 
 	/**
 	 * Performs OCR on an image displaying classes of a certain subject.
@@ -380,6 +366,7 @@ public class SchedulePlanner {
 			String anything = ".+?";
 			String followedByProfMark = "(?=\\s\\p{Punct}P\\p{Punct})"; // "(P)"
 			String precededByProfMark = "(?<=\\s\\p{Punct}P\\p{Punct})";
+			
 			String crnPattern = noPrecedingNumbers + "\\d{5}" + noFollowingNumbers;
 			String sectionPattern = noPrecedingNumbers + "\\p{Alnum}{3}" + noFollowingNumbers;
 			String daysPattern = precededBySpace + legalDaysRepr + followedByHour;
@@ -554,6 +541,24 @@ public class SchedulePlanner {
 
 		public int getEndTime() {
 			return endTime;
+		}
+		
+		public Boolean checkConflict(int start, int end, String d) { 
+			Boolean sameTimes = start == startTime && end == endTime;
+			Boolean startsInBetween = start <= startTime && end > endTime;
+			Boolean endsHalfway = start <= endTime && end > endTime;
+			Boolean sameDays = days.equals(d);
+			
+			if (sameTimes && sameDays) {
+				return true;
+			} else if (start <= startTime && end >= endTime && sameDays) {
+				return true;
+			} else if (start >= startTime && end <= endTime && sameDays) {
+				return true;
+			} else if (startsInBetween || endsHalfway && sameDays){
+				return true;
+			}
+			return false;
 		}
 
 	}
