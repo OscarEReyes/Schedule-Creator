@@ -1,6 +1,7 @@
 package scheduleCreator;
 
 import java.io.IOException;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -12,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduleCreator.model.Course;
+import scheduleCreator.model.CourseClass;
 import scheduleCreator.model.SchedulePlanner;
 import scheduleCreator.view.CourseEditDialogController;
 import scheduleCreator.view.LoginDialogController;
@@ -263,19 +265,20 @@ public class MainApp extends Application {
 		}
 	}
 	
-	public void generateSchedule() throws IOException, InterruptedException {
+	public List<CourseClass> generateSchedule() throws IOException, InterruptedException {
 		SchedulePlanner sp = new SchedulePlanner.SchedulePlannerBuilder()
 				.user(user)
 				.semester(semester)
 				.build();
 		try {
-			sp.genSchedule(CollegeCourseData);
+			return sp.genSchedule(CollegeCourseData);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		return null;
+
 	}
 
-	
 }
