@@ -12,7 +12,7 @@ public class CourseClass {
 	private final Course courseInfo;
 	
 	//optional
-	private CourseClass lab;
+	private CourseClass lab = null;
 	
 	// Getters
 	public Schedule getSchedule() {
