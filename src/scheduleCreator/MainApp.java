@@ -28,7 +28,6 @@ public class MainApp extends Application {
 	private ObservableList<Course> CollegeCourseData = FXCollections.observableArrayList();
 	private User user;
 	private Semester semester;
-	private Preferences preferences;
 
 	/**
 	 * Constructor
@@ -97,7 +96,6 @@ public class MainApp extends Application {
 
 			} while (user == null || semester == null);
 
-			preferences = showPreferencesDialog();
 		} catch (IOException e) {  
 			e.printStackTrace();
 		}
@@ -266,7 +264,7 @@ public class MainApp extends Application {
 	}
 	
 	public void generateSchedule() throws IOException, InterruptedException {
-		SchedulePlanner sp = new SchedulePlanner.SchedulePlannerBuilder(preferences)
+		SchedulePlanner sp = new SchedulePlanner.SchedulePlannerBuilder()
 				.user(user)
 				.semester(semester)
 				.build();

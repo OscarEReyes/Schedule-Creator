@@ -24,12 +24,10 @@ import scheduleCreator.view.SemesterDialogController.Semester;
 public class SchedulePlanner {
 	private User user;
 	private Semester semester;
-	private Preferences preferences;
 
 	public SchedulePlanner(SchedulePlannerBuilder builder){
 		this.user = builder.user;
 		this.semester = builder.semester;
-		this.preferences = builder.preferences;
 	}
 
 	/**
@@ -312,11 +310,9 @@ public class SchedulePlanner {
 	public static class SchedulePlannerBuilder {
 		private User user;
 		private Semester semester;
-		private Preferences preferences;
 
 
-		public SchedulePlannerBuilder(Preferences preferences){
-			this.preferences = preferences;
+		public SchedulePlannerBuilder(){
 		}
 
 		public SchedulePlannerBuilder user(User user){
