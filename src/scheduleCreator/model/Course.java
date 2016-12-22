@@ -18,6 +18,7 @@ public class Course {
 	
 	private List<CourseClass> courseClasses;
 	private boolean prefProfAvailable = false;
+	private CourseClass chosenClass = null;
 	
 	public Course(CollegeCourseBuilder builder) {
 		this.courseDepartment = builder.courseDepartment;
@@ -52,6 +53,10 @@ public class Course {
 	public void setPrefProfAvailable(Boolean avail) {
 		this.prefProfAvailable = avail;
 	}
+	
+	public void setChosenClass(CourseClass c) {
+		this.chosenClass = c;
+	}
 		
 	// Getters
 	
@@ -81,6 +86,10 @@ public class Course {
 	
 	public Boolean getPrefProfAvailable() {
 		return this.prefProfAvailable;
+	}
+	
+	public CourseClass getChosenClass() {
+		return this.chosenClass;
 	}
 	
 	// Get Property Methods
