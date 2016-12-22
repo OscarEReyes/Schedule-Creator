@@ -2,6 +2,8 @@ package scheduleCreator.view;
 
 	
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,9 +21,6 @@ public class ScheduleOverviewController {
 	private TableView<Course> CourseTable;
     @FXML
     private TableColumn<Course, String> courseNameColumn;
-    
-    @FXML
-    private TableColumn<CourseClass, String> courseClassColumn;
 
     @FXML
     private Label courseLabel;
@@ -31,6 +30,20 @@ public class ScheduleOverviewController {
     private Label creditHoursLabel;
     @FXML
     private Label prefProfLabel;
+    
+    @FXML
+    private Label crnLabel;
+    @FXML
+    private Label sectionLabel;
+    @FXML
+    private Label professorLabel;
+    @FXML
+    private Label scheduleLabel;
+    @FXML
+    private Label placesLeftLabel;
+    @FXML
+    private Label labLabel;
+
 
 	// Reference to the main application in the program.
 	private MainApp mainApp;
@@ -62,6 +75,10 @@ public class ScheduleOverviewController {
 	    
 	    CourseTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> showCollegeCourseDetails(newValue));
+	    // "Listen" for selection changes and display the selected course's chosen class details
+	    // when selection is changed
+	    CourseTable.getSelectionModel().selectedItemProperty().addListener(
+          (observable, oldValue, newValue) -> showClassDetails(newValue));
 	}
 
 	
@@ -164,14 +181,71 @@ public class ScheduleOverviewController {
 	
 	/**
 	 * Called when the user clicks the generate schedule button. 
+	 * This method results in the schedule being generated, but specifically,
+	 * this method handles alerting the user of what classes were chosen or if an error occurred
+	 * 
+	 * The SchedulePlanner object chooses the appropriate classes and sets the chosenClass
+	 * attribute in a Course object to the CourseClass instance of the appropriate class.
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
 	@FXML
-	private void handleGenerateSchedule() throws IOException, InterruptedException {	  
-		mainApp.generateSchedule();
-	}
+	private void handleGenerateSchedule() throws IOException, InterruptedException {	
+		List<CourseClass> chosenClasses = mainApp.generateSchedule();
+		if (chosenClasses != null) {
+			 Alert alert = new Alert(AlertType.WARNING);
+       alert.initOwner(mainApp.getPrimaryStage());
+       alert.setTitle("Error generating schedule");
+       alert.setContentText("There was an error generating the schedule.");
+       alert.showAndWait();
+		} else {
+			String chosenClassesStr = "";
+			for (CourseClass c: chosenClasses) {
+				chosenClassesStr += c;
+			}
+			 Alert alert = new Alert(AlertType.INFORMATION);
+       alert.initOwner(mainApp.getPrimaryStage());
+       alert.setTitle("Courses Selected");
+       alert.setContentText("The courses chosen were: " + "\n" + chosenClassesStr);
+
+       alert.showAndWait();
+		}
+		
+	}	
 	
+	/**
+	 * Shows details of the chosen class for the selected course if one has been chosen.
+	 * Other wise it will show empty fields.
+	 * @param course
+	 */
+	@FXML
+	private void showClassDetails(Course course) {
+    if (course != null && course.getChosenClass() != null) {
+        // Fill the labels with info from the course object.
+    		CourseClass chosenClass = course.getChosenClass();
+    		
+        crnLabel.setText(chosenClass.getClassCrn());
+        sectionLabel.setText(chosenClass.getClassSection());
+        professorLabel.setText(chosenClass.getClassProf());
+        scheduleLabel.setText(chosenClass.getSchedule().toString());
+        placesLeftLabel.setText(Integer.toString(chosenClass.getPlacesLeft()));
+        if (chosenClass.getLab() != null) {
+          labLabel.setText(chosenClass.getLab().toString());
+        } else {
+          labLabel.setText("No lab");
+        }
+    } else {
+        // CollegeCourse is null, clear all text.
+    	crnLabel.setText("");
+      sectionLabel.setText("");
+      professorLabel.setText("");
+      scheduleLabel.setText("");
+      placesLeftLabel.setText("");
+      labLabel.setText("");
+
+    }
+}
+
 
 }
 
