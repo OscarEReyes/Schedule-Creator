@@ -11,41 +11,40 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduleCreator.view.ScheduleOverviewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduleCreator.view.ScheduleOverviewController">
    <children>
-      <SplitPane dividerPositions="0.505730659025788" layoutX="89.0" layoutY="114.0" prefHeight="200.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.1361031518624642" layoutX="89.0" layoutY="114.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="310.0">
                <children>
                   <TableView fx:id="CourseTable" layoutX="20.0" layoutY="15.0" prefHeight="348.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                         <TableColumn fx:id="courseNameColumn" prefWidth="173.0" text="Courses" />
-                      <TableColumn fx:id="courseClassColumn" prefWidth="175.0" text="Class" />
                     </columns>
                   </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="348.0" prefWidth="472.0">
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="525.0">
                <children>
-                  <Button layoutX="115.0" layoutY="274.0" mnemonicParsing="false" onAction="#handleRemoveCourse" prefHeight="25.0" prefWidth="100.0" text="Remove Course" />
-                  <Button layoutX="17.0" layoutY="274.0" mnemonicParsing="false" onAction="#handleNewCollegeCourse" prefHeight="25.0" prefWidth="88.0" text="Add Course" />
+                  <Button layoutX="354.0" layoutY="104.0" mnemonicParsing="false" onAction="#handleRemoveCourse" prefHeight="25.0" prefWidth="100.0" text="Remove Course" />
+                  <Button layoutX="354.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleNewCollegeCourse" prefHeight="25.0" prefWidth="100.0" text="Add Course" />
                   <Label layoutX="14.0" layoutY="20.0" prefHeight="33.0" prefWidth="126.0" text="Course">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button layoutX="17.0" layoutY="309.0" mnemonicParsing="false" onAction="#handleGenerateSchedule" text="Generate Schedule" />
-                  <Button layoutX="225.0" layoutY="274.0" mnemonicParsing="false" onAction="#handleEditCollegeCourse" prefHeight="25.0" prefWidth="45.0" text="Edit" />
-                  <GridPane layoutX="18.0" layoutY="65.0" prefHeight="183.0" prefWidth="298.0">
+                  <Button layoutX="14.0" layoutY="192.0" mnemonicParsing="false" onAction="#handleGenerateSchedule" text="Generate Schedule" />
+                  <Button layoutX="354.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleEditCollegeCourse" prefHeight="25.0" prefWidth="100.0" text="Edit" />
+                  <GridPane layoutX="18.0" layoutY="65.0" prefHeight="113.0" prefWidth="298.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="111.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.0" minWidth="10.0" prefWidth="187.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label prefHeight="17.0" prefWidth="88.0" text="Course:" />
@@ -58,7 +57,33 @@
                         <Label fx:id="prefProfLabel" prefHeight="17.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
-                  <Button layoutX="145.0" layoutY="309.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Inspect Class" />
+                  <GridPane layoutX="18.0" layoutY="295.0" prefHeight="177.0" prefWidth="438.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="214.0" minWidth="10.0" prefWidth="75.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="370.0" minWidth="10.0" prefWidth="363.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="CRN:" />
+                        <Label text="Section:" GridPane.rowIndex="1" />
+                        <Label text="Professor:" GridPane.rowIndex="2" />
+                        <Label text="Schedule:" GridPane.rowIndex="3" />
+                        <Label text="Places Left:" GridPane.rowIndex="4" />
+                        <Label text="Lab:" GridPane.rowIndex="5" />
+                     </children>
+                  </GridPane>
+                  <Label layoutX="18.0" layoutY="250.0" prefHeight="33.0" prefWidth="126.0" text="Class">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
         </items>
