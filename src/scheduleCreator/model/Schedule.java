@@ -48,4 +48,10 @@ public class Schedule {
 		return this.endTime;
 	}
 	
+	public String toString() {
+		return "Days: " + classDays + 
+					 " Hours:" + classHours +
+					 " Location: " + classLocation;
+	}
+	
 }
