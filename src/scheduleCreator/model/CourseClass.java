@@ -51,6 +51,10 @@ public class CourseClass {
 		return this.courseInfo;
 	}
 	
+	public CourseClass getLab() {
+		return this.lab;
+	}
+	
 	public CourseClass(CourseInstanceBuilder builder) {
 		this.schedule = builder.schedule;
 		this.placesLeft = builder.placesLeft;
