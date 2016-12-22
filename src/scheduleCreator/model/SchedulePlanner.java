@@ -173,7 +173,7 @@ public class SchedulePlanner {
 			} else {
 				chosenClass = getPrefClass(tmp, takenTimes);
 			}
-
+			tmp.setChosenClass(chosenClass);
 			chooseClass(chosenClasses, takenTimes, chosenClass);
 		}
 	}
@@ -191,6 +191,7 @@ public class SchedulePlanner {
 			CourseClass chosenClass;
 			Course tmp = stack.pop();
 			chosenClass = getPrefClass(tmp, takenTimes);
+			tmp.setChosenClass(chosenClass);
 			chooseClass(chosenClasses, takenTimes, chosenClass);
 		}
 	}
