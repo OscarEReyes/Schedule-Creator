@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import scheduleCreator.MainApp;
 import scheduleCreator.model.Course;
+import scheduleCreator.model.CourseClass;
 
 
 public class ScheduleOverviewController {
@@ -18,6 +19,9 @@ public class ScheduleOverviewController {
 	private TableView<Course> CourseTable;
     @FXML
     private TableColumn<Course, String> courseNameColumn;
+    
+    @FXML
+    private TableColumn<CourseClass, String> courseClassColumn;
 
     @FXML
     private Label courseLabel;
