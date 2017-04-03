@@ -24,14 +24,14 @@ public class SchedulePlanner {
 	private User user;
 	private Semester semester;
 
-	public SchedulePlanner(SchedulePlannerBuilder builder){
+	SchedulePlanner(SchedulePlannerBuilder builder){
 		this.user = builder.user;
 		this.semester = builder.semester;
 	}
 
 	/**
 	 * 
-	 * @param courseList
+	 * @param courseList ObservableList of Course Objects
 	 * @return A list of CourseClass objects which represent the optimal classes for the schedule.
 	 * @throws IOException
 	 * @throws InterruptedException
@@ -45,8 +45,7 @@ public class SchedulePlanner {
 			addOpenClasses(classes, classList, course);
 			course.setCourseClasses(classList);
 		}
-		List<CourseClass> chosenClasses = getOptimalClasses(courseList);
-		return chosenClasses;
+		return getOptimalClasses(courseList);
 	}
 
 
@@ -54,11 +53,11 @@ public class SchedulePlanner {
 	 * Checks if a college class is open based on its string of information,
 	 * if it is open, it creates a CourseClass instance and adds it to the passed
 	 * classList.
-	 * @param classes
-	 * @param classList
-	 * @param course
+	 * @param classes String representing classes
+	 * @param classList List of CourseClass Objects
+	 * @param course Course Object
 	 */
-	public void addOpenClasses(String[] classes, List<CourseClass> classList, Course course) {
+	private void addOpenClasses(String[] classes, List<CourseClass> classList, Course course) {
 		int fullClassCount = 0;
 		int invalidSectionCount = 0;
 		
@@ -97,38 +96,36 @@ public class SchedulePlanner {
 
 	/**
 	 * Creates a CourseClass objects and returns it.
-	 * @param info
-	 * @param course
+	 * @param info String representing info about a class
+	 * @param course Course Object
 	 * @return CourseClass object that gets its information from the string passed.
 	 * @throws FullClassException 
 	 * @throws InvalidSectionException 
 	 * @throws NullClassFieldException 
 	 */
-	public CourseClass createCourseInstance(String info, Course course)
+	private CourseClass createCourseInstance(String info, Course course)
 			throws FullClassException, 
 						 InvalidSectionException,
 						 NullClassFieldException {
 		ClassInformation cInfo = new ClassInformation(info);
 		Schedule schedule = new Schedule(cInfo.getDays(), cInfo.getHours(), cInfo.getLocation());
 
-		CourseClass courseClass = new CourseClass.
+		return new CourseClass.
 				CourseInstanceBuilder(schedule)
 				.classCrn(cInfo.getCRN())
 				.placesLeft(cInfo.getSpacesLeft())
 				.classSection(cInfo.getSection())
 				.classProf(cInfo.getProf())
 				.courseInfo(course).build();
-
-		return courseClass;
 	}
 
 
 	/**
 	 * Gets optimal classes
-	 * @param courseList
+	 * @param courseList ObservableList of Course Objects
 	 * @return a List of CourseClass objects
 	 */
-	public List<CourseClass> getOptimalClasses(ObservableList<Course> courseList) {
+	private List<CourseClass> getOptimalClasses(ObservableList<Course> courseList) {
 		Stack<Course> priorityStack = new Stack<Course>();
 		Stack<Course> nPriorityStack = new Stack<Course>();
 		List<CourseClass> chosenClasses = new ArrayList<CourseClass>();
@@ -157,9 +154,9 @@ public class SchedulePlanner {
 
 	/**
 	 * Iterates over stack. Choosing a class for each course.
-	 * @param stack
-	 * @param takenTimes
-	 * @param chosenClasses
+	 * @param stack A stack of Course Objects
+	 * @param takenTimes List of ScheduledClass
+	 * @param chosenClasses List of CourseClass representing classes that have been chosen
 	 */
 	private void iterPStack(Stack<Course> stack, List<ScheduledClass> takenTimes,
 			List<CourseClass> chosenClasses){
@@ -180,9 +177,9 @@ public class SchedulePlanner {
 
 	/**
 	 * Iterates over the stack. Choosing classes for each course
-	 * @param stack
-	 * @param takenTimes
-	 * @param chosenClasses
+	 * @param stack Stack of Course Objects
+	 * @param takenTimes List of ScheduledClass Objects representing times taken
+	 * @param chosenClasses List of CourseClass Objects representing chosenClasses
 	 */
 	private void iterStack(Stack<Course> stack, 
 			List<ScheduledClass> takenTimes, List<CourseClass> chosenClasses) {
@@ -201,9 +198,9 @@ public class SchedulePlanner {
 	 * that represent the chosen classes. Also adds an ScheduledClass objects
 	 * created with the passed CourseInstance used as its parameter.
 	 * 
-	 * @param chosenClasses
-	 * @param takenTimes
-	 * @param chosenClass
+	 * @param chosenClasses List of CourseClass Objects representing chosenClasses
+	 * @param takenTimes List of ScheduledClass Objects representing times taken
+	 * @param chosenClass CourseClass Object representing a chosenClass
 	 */
 	private void chooseClass(List<CourseClass> chosenClasses, 
 			List<ScheduledClass> takenTimes, CourseClass chosenClass) {
@@ -215,11 +212,11 @@ public class SchedulePlanner {
 
 	/**
 	 * Gets a class that fits in the schedule (Not in taken times)
-	 * @param course
-	 * @param takenTimes
+	 * @param course Course Instance
+	 * @param takenTimes List of ScheduledClass Objects
 	 * @return CourseClass Object with schedule that does not conflict.
 	 */
-	public CourseClass getPrefClass(Course course, List<ScheduledClass> takenTimes ) {
+	private CourseClass getPrefClass(Course course, List<ScheduledClass> takenTimes) {
 		List<CourseClass> classes = course.getCourseClasses();
 		for (CourseClass courseClass: classes) {
 			if (takenTimes.size() == 0) {
@@ -234,10 +231,10 @@ public class SchedulePlanner {
 
 	/**
 	 * Gets a class with the preferred professor as its professor.
-	 * @param course
+	 * @param course Course Instance
 	 * @return CourseClass Object with a professor attribute equal to that of the preferred professor.
 	 */
-	public CourseClass getClassWithPrefProf(Course course) {
+	private CourseClass getClassWithPrefProf(Course course) {
 		List<CourseClass> classes = course.getCourseClasses();
 
 		for (CourseClass courseClass: classes) {
@@ -261,7 +258,7 @@ public class SchedulePlanner {
 	 * @return Boolean that tells whether there is a time conflict between the passed time 
 	 *         and an already chosen class
 	 */
-	public boolean timeConflict(List<ScheduledClass> takenTimes, CourseClass courseClass) {
+	private boolean timeConflict(List<ScheduledClass> takenTimes, CourseClass courseClass) {
 		int start = courseClass.getStartTime();
 		int end = courseClass.getEndTime();
 		String days = courseClass.getSchedule().getClassDays();
@@ -278,13 +275,13 @@ public class SchedulePlanner {
 	/**
 	 * Performs OCR on an image displaying classes of a certain subject.
 	 * 
-	 * @param course
+	 * @param course Course Object
 	 * @return String array, each array being the information of a class in a predictable order.
 	 * 
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public String[] getCourseClasses(Course course) throws IOException, InterruptedException {
+	private String[] getCourseClasses(Course course) throws IOException, InterruptedException {
 		File imageFile;
 		String results;
 		WebScraper scraper = new WebScraper();
@@ -293,8 +290,7 @@ public class SchedulePlanner {
 
 		if (imageFile != null) {
 			results = imAn.analyzeImage(imageFile);
-			String[] classes = results.split("\\r?\\n");
-			return classes;
+			return results.split("\\r?\\n");
 		} else {
 			return null;
 		}
@@ -349,7 +345,7 @@ public class SchedulePlanner {
 		private String location = null;
 		private int spacesLeft;
 
-		public ClassInformation(String classInfo) throws InvalidSectionException {
+		ClassInformation(String classInfo) throws InvalidSectionException {
 			String noPrecedingNumbers = "(?<!\\d)";
 			String noFollowingNumbers = "(?!\\d)";
 			String legalDaysRepr = "(\\p{Upper}{1,4})";
@@ -419,31 +415,31 @@ public class SchedulePlanner {
 
 		}		
 
-		public String getCRN() {
+		String getCRN() {
 			return this.crn;
 		}
 
-		public String getSection() {
+		String getSection() {
 			return this.section;
 		}
 
-		public String getDays() {
+		String getDays() {
 			return this.days;
 		}
 
-		public String getHours() {
+		String getHours() {
 			return this.hours;
 		}
 
-		public String getProf() {
+		String getProf() {
 			return this.prof;
 		}
 
-		public String getLocation() {
+		String getLocation() {
 			return this.location;
 		}
 
-		public int getSpacesLeft() {
+		int getSpacesLeft() {
 			return this.spacesLeft;
 		}
 	}
@@ -460,7 +456,7 @@ public class SchedulePlanner {
 		private List<Course> array;
 		private int length;
 
-		public void sort(List <Course> courseList) {
+		void sort(List<Course> courseList) {
 
 			if (courseList == null || courseList.size() == 0) {
 				return;
@@ -521,13 +517,13 @@ public class SchedulePlanner {
 		private final int startTime;
 		private final int endTime;
 
-		public ScheduledClass(CourseClass courseClass) {
+		ScheduledClass(CourseClass courseClass) {
 			this.startTime = courseClass.getStartTime();
 			this.endTime = courseClass.getEndTime();
 			this.days = courseClass.getDays();
 		}
 		
-		public Boolean checkConflict(int start, int end, String d) { 
+		Boolean checkConflict(int start, int end, String d) {
 			Boolean sameTimes = start == startTime && end == endTime;
 			Boolean startsInBetween = start <= startTime && end > endTime;
 			Boolean endsHalfway = start <= endTime && end > endTime;
