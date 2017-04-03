@@ -22,7 +22,6 @@ import org.openqa.selenium.support.ui.Select;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import scheduleCreator.model.Course;
 import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.SemesterDialogController.Semester;
@@ -43,9 +42,9 @@ public class WebScraper {
 	
   /**
    * A method that will scrape the Blue & Gold website for the list of classes of a course.
-   * @param driver
+   * @param user
    * @param course
-   * @param js
+   * @param semester
    * @return File - an image that will be used to perform OCR and get the classes for a course
    * @throws IOException
    */

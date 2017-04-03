@@ -2,7 +2,6 @@ package scheduleCreator.view;
 
 	
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.fxml.FXML;
@@ -99,7 +98,7 @@ public class ScheduleOverviewController {
 	 * Fills every text field to display information about the college course.
 	 * If the specified college course is null, clears all text fields.
 	 * 
-	 * @param collegecourse or null
+	 * @param course or null
 	 */
 	private void showCollegeCourseDetails(Course course) {
 	    if (course != null) {

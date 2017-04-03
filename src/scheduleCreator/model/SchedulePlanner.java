@@ -16,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import ocr.ImageAnalyzer;
 import ocr.WebScraper;
-import scheduleCreator.MainApp;
 import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.PreferenceDialogController.Preferences;
 import scheduleCreator.view.SemesterDialogController.Semester;
@@ -98,14 +97,14 @@ public class SchedulePlanner {
 
 	/**
 	 * Creates a CourseClass objects and returns it.
-	 * @param classInfoString
+	 * @param info
 	 * @param course
 	 * @return CourseClass object that gets its information from the string passed.
 	 * @throws FullClassException 
 	 * @throws InvalidSectionException 
 	 * @throws NullClassFieldException 
 	 */
-	public CourseClass createCourseInstance(String info, Course c) 
+	public CourseClass createCourseInstance(String info, Course course)
 			throws FullClassException, 
 						 InvalidSectionException,
 						 NullClassFieldException {
@@ -118,7 +117,7 @@ public class SchedulePlanner {
 				.placesLeft(cInfo.getSpacesLeft())
 				.classSection(cInfo.getSection())
 				.classProf(cInfo.getProf())
-				.courseInfo(c).build();
+				.courseInfo(course).build();
 
 		return courseClass;
 	}
@@ -126,7 +125,7 @@ public class SchedulePlanner {
 
 	/**
 	 * Gets optimal classes
-	 * @param collegeCourseData
+	 * @param courseList
 	 * @return a List of CourseClass objects
 	 */
 	public List<CourseClass> getOptimalClasses(ObservableList<Course> courseList) {

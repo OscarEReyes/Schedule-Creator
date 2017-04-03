@@ -1,4 +1,4 @@
-package scheduleCreator.view;
+ package scheduleCreator.view;
 
 import java.util.ArrayList;
 import java.util.List;
