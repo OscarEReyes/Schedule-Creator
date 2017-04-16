@@ -105,21 +105,34 @@ public class ScheduleOverviewController {
 	 */
 	private void showCollegeCourseDetails(Course course) {
 	    if (course != null) {
-	        // Fill the labels with info from the course object.
-	        courseLabel.setText(course.getCourseDep() +
-	        					course.getCourseNumber());
-	        courseNameLabel.setText(course.getCourseName());
-	        creditHoursLabel.setText(course.getCreditHours());
-	        prefProfLabel.setText(course.getPrefProf());
-	  
+            setCourseLabels(course);
 	    } else {
-	        // CollegeCourse is null, clear all text.
-	        courseLabel.setText("");
-	        courseNameLabel.setText("");
-	        creditHoursLabel.setText("");
-	        prefProfLabel.setText("");
+	        clearCollegeCourseLabels();
 	    }
 	}
+
+    /**
+     * Sets the text of Labels related to a Course object, using the values in a passed Course object course.
+     * @param course The selected Course, whose details the user wishes to see.
+     */
+    private void setCourseLabels(Course course) {
+        courseLabel.setText(course.getCourseDep() +
+                course.getCourseNumber());
+        courseNameLabel.setText(course.getCourseName());
+        creditHoursLabel.setText(course.getCreditHours());
+        prefProfLabel.setText(course.getPrefProf());
+    }
+
+    /**
+     * Clears the labels associated with a Course object.
+     * Ran when the user has selected a blank field and there is no Course to load.
+     */
+	private void clearCollegeCourseLabels() {
+        courseLabel.setText("");
+        courseNameLabel.setText("");
+        creditHoursLabel.setText("");
+        prefProfLabel.setText("");
+    }
 	
 	/**
 	 * Called when the user clicks on the remove course button.
@@ -196,7 +209,7 @@ public class ScheduleOverviewController {
      * Returns a StringBuilder object, which when turned to as String represents the classes chosen by the user.
      *
      * @param chosenClasses List of CourseClass objects representing classes chosen by the user.
-     * @return
+     * @return classesBuilder The StringBuilder which when converted to a string represents a chosen class.
      */
     private StringBuilder getChosenClasses(List<CourseClass> chosenClasses) {
         StringBuilder classesBuilder = new StringBuilder();
@@ -221,6 +234,10 @@ public class ScheduleOverviewController {
         }
     }
 
+    /**
+     * Sets the labels related to CourseClasses using the class selected by the user.
+     * @param chosenClass The class the user selected, whose values will be used to populate the appropiate labels.
+     */
     private void setLabelsText(CourseClass chosenClass) {
         crnLabel.setText(chosenClass.getClassCrn());
         sectionLabel.setText(chosenClass.getClassSection());
@@ -234,6 +251,9 @@ public class ScheduleOverviewController {
         }
     }
 
+    /**
+     *  Clears course class related labels.
+     */
     private void clearLabelsText() {
         crnLabel.setText("");
         sectionLabel.setText("");
