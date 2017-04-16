@@ -8,8 +8,6 @@ import alertMessages.CoursesSelectedAlert;
 import alertMessages.SchedGenErrorAlert;
 import alertMessages.SelectionAlert;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -67,14 +65,10 @@ public class ScheduleOverviewController {
 	private void initialize() {
 		// Initialize the Schedule table with its column.
 		courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().courseNameProperty());
-		
 		 // Clear the CollegeCourse Information.
 	    showCollegeCourseDetails(null);
-	
 	    // "Listen" for selection changes and display the selected course's details
 	    // when selection is changed
-	    
-	    
 	    CourseTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> showCollegeCourseDetails(newValue));
 	    // "Listen" for selection changes and display the selected course's chosen class details
