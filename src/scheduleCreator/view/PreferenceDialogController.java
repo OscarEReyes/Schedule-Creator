@@ -1,6 +1,7 @@
 package scheduleCreator.view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -47,39 +48,24 @@ public class PreferenceDialogController {
 	 */
 	@FXML
 	private void initialize() {
-		
 		ToggleGroup startToggle = new ToggleGroup();
 		
 		startEarly.setToggleGroup(startToggle);
 		finishEarly.setToggleGroup(startToggle);
-  	List<String> startTimeList = new ArrayList<String>();
-  	startTimeList.add("08:00 am");
-  	startTimeList.add("09:00 am");
-  	startTimeList.add("10:00 am");
-  	startTimeList.add("11:00 am");
-  	startTimeList.add("12:00 pm");
-  	startTimeList.add("01:00 pm");
-  	startTimeList.add("02:00 pm");
-  	startTimeList.add("03:00 pm");
-  	startTimeList.add("04:00 pm");
-  	startTimeList.add("05:00 pm");
+  	    List<String> startTimeList = new ArrayList<>();
+  	    String[] startArr = {"8:00 am", "09:00 am", "10:00 am", "11:00 am", "12:00 pm",
+                        "01:00 pm", "02:00 pm","03:00 pm", "04:00 pm", "05:00 pm"};
+        List<String> temp = Arrays.asList(startArr);
+        startTimeList.addAll(temp);
 
-  	
     ObservableList<String> obStartTimeList = FXCollections.observableList(startTimeList);
     startTime.getItems().clear();
     startTime.setItems(obStartTimeList);
     
-    List<String> endTimeList = new ArrayList<String>();
-  	endTimeList.add("12:00 pm");
-  	endTimeList.add("01:00 pm");
-  	endTimeList.add("02:00 pm");
-  	endTimeList.add("03:00 pm");
-  	endTimeList.add("04:00 pm");
-  	endTimeList.add("05:00 pm");
-  	endTimeList.add("06:00 pm");
-  	endTimeList.add("07:00 pm");
-  	endTimeList.add("08:00 pm");
-  	endTimeList.add("09:00 pm");
+    List<String> endTimeList = new ArrayList<>();
+    String[] endArr = {"12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm",
+                        "05:00 pm", "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm"};
+
     ObservableList<String> obEndTimeList = FXCollections.observableList(endTimeList);
     endTime.getItems().clear();
     endTime.setItems(obEndTimeList);

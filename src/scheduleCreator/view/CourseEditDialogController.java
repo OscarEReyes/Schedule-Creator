@@ -68,6 +68,8 @@ public class CourseEditDialogController {
 
     /**
      * Executed if the user clicks confirm.
+     * Sets the StringProperty variables in the course object to its appropiate value
+     * to replace the placeholder text.
      */
     @FXML
     private void handleConfirm() {
@@ -77,6 +79,7 @@ public class CourseEditDialogController {
             course.setCourseName(courseNameField.getText());
             course.setPrefProf(prefProfField.getText());
             course.setCreditHours(Character.toString(courseNumberField.getText().charAt(1)));
+
             confirmClicked = true;
             dialogStage.close();
         }
@@ -94,24 +97,23 @@ public class CourseEditDialogController {
     /**
      * Verifies that the user input is valid.
      * 
-     * @return true when input is valid.
+     * @return true if the input is valid.
      */
     private boolean isInputValid() {
         String errorMessage = "";
+        String courseDep = courseDepartmentField.getText();
+        String courseNum = courseNumberField.getText();
+        String courseName = courseNameField.getText();
 
-        if (courseDepartmentField.getText() == null || 
-        		courseDepartmentField.getText().length() != 4) {
+        if (courseDep == null || courseDep.length() != 4) {
             errorMessage += "No valid course department!\n"; 
         }
-        if (courseNumberField.getText() == null || 
-        		courseNumberField.getText().length() != 4) {
+        if (courseNum == null || courseNum.length() != 4) {
             errorMessage += "No valid course number!\n"; 
         }
-        if (courseNameField.getText() == null || 
-        		courseNameField.getText().length() == 0) {
+        if (courseName == null || courseName.length() == 0) {
             errorMessage += "No valid course name!\n"; 
         }
-
         return InvalidFieldHandling.checkErrorMessage(dialogStage, errorMessage);
     }
 
