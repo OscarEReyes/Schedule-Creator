@@ -2,11 +2,8 @@ package scheduleCreator.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.List;
-
-import javafx.beans.property.IntegerProperty;
 
 public class Course {
 	private final StringProperty creditHours;
@@ -49,7 +46,7 @@ public class Course {
 		this.prefProf.set(prefProf);
 	}
 
-	public void setCourseClasses(List<CourseClass> classes) {
+	void setCourseClasses(List<CourseClass> classes) {
 		this.courseClasses = classes;
 	}
 	
@@ -57,7 +54,7 @@ public class Course {
 		this.prefProfAvailable = avail;
 	}
 	
-	public void setChosenClass(CourseClass c) {
+	void setChosenClass(CourseClass c) {
 		this.chosenClass = c;
 	}
 		
@@ -83,11 +80,11 @@ public class Course {
 		return prefProf.get();
 	}
 	
-	public List<CourseClass> getCourseClasses() {
+	List<CourseClass> getCourseClasses() {
 		return this.courseClasses;
 	}
 	
-	public Boolean getPrefProfAvailable() {
+	Boolean getPrefProfAvailable() {
 		return this.prefProfAvailable;
 	}
 	
@@ -96,27 +93,22 @@ public class Course {
 	}
 	
 	// Get Property Methods
-	
-	public StringProperty creditHoursProperty() {
-		return creditHours;
-	}
-	
-	public StringProperty courseDepProperty() {
-		return courseDep;
-	}
-	
-	public StringProperty courseNumberProperty() {
-		return courseNumber;
-	}
-	
-	public StringProperty courseNameProperty() {
+    public StringProperty courseNameProperty() {
 		return courseName;
 	}
-	
+
+	// To String Method
+    public String toString() {
+	    return this.courseDep.get() + courseNumber.get() + courseName.get();
+    }
+
+    /**
+     * CollegeCourse Builder class.
+     */
 	public static class CollegeCourseBuilder {
 		private StringProperty courseDep;
 		private StringProperty courseNumber;
-		private StringProperty courseName;
+		private final StringProperty courseName;
 		private StringProperty prefProf;
 
 		public CollegeCourseBuilder(String courseName){
@@ -124,13 +116,13 @@ public class Course {
 			this.prefProf = new SimpleStringProperty("");
 		}
 
-		public CollegeCourseBuilder courseDepartment(String courseDep){
-			this.courseDep = new SimpleStringProperty(courseDep);
+		public CollegeCourseBuilder courseDepartment(){
+			this.courseDep = new SimpleStringProperty("");
 			return this;
 		}
 
-		public CollegeCourseBuilder courseNumber(String courseNumber){
-			this.courseNumber = new SimpleStringProperty(courseNumber);
+		public CollegeCourseBuilder courseNumber(){
+			this.courseNumber = new SimpleStringProperty("0000");
 			return this;
 		}
 

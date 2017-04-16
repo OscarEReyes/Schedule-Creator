@@ -35,18 +35,21 @@ public class CourseClass {
 		return this.classProf;
 	}
 	
-	public int getStartTime() {
+	int getStartTime() {
 		return this.schedule.getStartTime();
 	}
 	
-	public int getEndTime() {
+	int getEndTime() {
 		return this.schedule.getEndTime();
 	}
 	
-	public String getDays() { 
+	String getDays() {
 		return this.getSchedule().getClassDays();
 	}
-	
+
+	public String toString() {
+	    return courseInfo.toString() + " " + schedule.toString();
+    }
 	public Course getCourseInfo() {
 		return this.courseInfo;
 	}
@@ -54,8 +57,10 @@ public class CourseClass {
 	public CourseClass getLab() {
 		return this.lab;
 	}
+
+
 	
-	public CourseClass(CourseInstanceBuilder builder) {
+	CourseClass(CourseInstanceBuilder builder) {
 		this.schedule = builder.schedule;
 		this.placesLeft = builder.placesLeft;
 		this.classCrn = builder.classCrn;
@@ -74,11 +79,11 @@ public class CourseClass {
 			private Course courseInfo;
 			private CourseClass lab;
 			
-			public CourseInstanceBuilder(final Schedule schedule) {	
+			CourseInstanceBuilder(final Schedule schedule) {
 				this.schedule = schedule;
 			}	
 			
-			public CourseInstanceBuilder placesLeft(int placesLeft) throws FullClassException {
+			CourseInstanceBuilder placesLeft(int placesLeft) throws FullClassException {
 				if (placesLeft != 0) { 
 					this.placesLeft = placesLeft;
 					return this;
@@ -88,7 +93,7 @@ public class CourseClass {
 				
 			}
 			
-			public CourseInstanceBuilder classCrn(String classCrn) throws NullClassFieldException {
+			CourseInstanceBuilder classCrn(String classCrn) throws NullClassFieldException {
 				if (classCrn != null) {
 					this.classCrn = classCrn;
 				} else { 
@@ -97,12 +102,12 @@ public class CourseClass {
 				return this;
 			}
 	
-			public CourseInstanceBuilder classSection(String classSection) {
+			CourseInstanceBuilder classSection(String classSection) {
 				this.classSection = classSection;
 				return this;
 			}
 			
-			public CourseInstanceBuilder classProf(String classProf) throws NullClassFieldException {
+			CourseInstanceBuilder classProf(String classProf) throws NullClassFieldException {
 				if (classProf != null) {
 					this.classProf = classProf;
 				} else {
@@ -112,18 +117,17 @@ public class CourseClass {
 
 			}
 			
-			public CourseInstanceBuilder courseInfo(Course courseInfo) {
+			CourseInstanceBuilder courseInfo(Course courseInfo) {
 				this.courseInfo = courseInfo;
 				return this;
 			}
-	
-		
+
 			public CourseInstanceBuilder lab(CourseClass lab) {
 				this.lab = lab;
 				return this;
 			}
 			
-			public CourseClass build() {
+			CourseClass build() {
 				return new CourseClass(this);
 			}
 	}

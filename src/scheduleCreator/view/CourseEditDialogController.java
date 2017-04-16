@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import scheduleCreator.model.Course;
-import invalidInputHandling.InvalidFieldHandling;
+import alertMessages.InvalidFieldHandling;
 
 /*
  * Controller for CourseEditDialog

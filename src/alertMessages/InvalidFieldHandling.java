@@ -1,10 +1,10 @@
-package invalidInputHandling;
+package alertMessages;
 
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 /**
- * Created by oscarjr on 4/15/2017.
+ * Created by Oscar Reyes on 4/15/2017.
  */
 public class InvalidFieldHandling {
     public static boolean checkErrorMessage(Stage dialogStage, String errorMessage) {

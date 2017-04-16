@@ -4,6 +4,9 @@ package scheduleCreator.view;
 import java.io.IOException;
 import java.util.List;
 
+import alertMessages.CoursesSelectedAlert;
+import alertMessages.SchedGenErrorAlert;
+import alertMessages.SelectionAlert;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -127,11 +130,7 @@ public class ScheduleOverviewController {
 	    if (selectedIndex >= 0) {
 	    	CourseTable.getItems().remove(selectedIndex);
 	   	} else {
-	        Alert alert = new Alert(AlertType.WARNING);
-	        alert.initOwner(mainApp.getPrimaryStage());
-	        alert.setTitle("No Selection");
-	        alert.setContentText("Select a course from the table.");
-	        alert.showAndWait();
+            SelectionAlert.alertSelectionError(mainApp);
 	    }
 	}
 	
@@ -143,8 +142,8 @@ public class ScheduleOverviewController {
 	@FXML
 	private void handleNewCollegeCourse() {
 	    Course tempCollegeCourse = new Course.CollegeCourseBuilder("Course")
-	    		.courseDepartment("")
-	    		.courseNumber("0000")
+	    		.courseDepartment()
+	    		.courseNumber()
 	    		.build();
 	    
 	    boolean confirmedClicked = mainApp.showCollegeCourseEditDialog(tempCollegeCourse);
@@ -168,13 +167,8 @@ public class ScheduleOverviewController {
 	        }
 	    } else {
 	        // Handle no course being selected.
-	        Alert alert = new Alert(AlertType.WARNING);
-	        alert.initOwner(mainApp.getPrimaryStage());
-	        alert.setTitle("No Course Selected");
-	        alert.setContentText("Please select a Course in the table.");
-
-	        alert.showAndWait();
-	    }
+            SelectionAlert.alertSelectionError(mainApp);
+        }
 	}
 	
 	/**
@@ -190,28 +184,20 @@ public class ScheduleOverviewController {
 	@FXML
 	private void handleGenerateSchedule() throws IOException, InterruptedException {	
 		List<CourseClass> chosenClasses = mainApp.generateSchedule();
-		if (chosenClasses != null) {
-			 Alert alert = new Alert(AlertType.WARNING);
-       alert.initOwner(mainApp.getPrimaryStage());
-       alert.setTitle("Error generating schedule");
-       alert.setContentText("There was an error generating the schedule.");
-       alert.showAndWait();
+		if (chosenClasses == null) {
+            SchedGenErrorAlert.alertSchedGenError(mainApp);
 		} else {
-			String chosenClassesStr = "";
-			for (CourseClass c: chosenClasses) {
-				chosenClassesStr += c;
-			}
-			 Alert alert = new Alert(AlertType.INFORMATION);
-       alert.initOwner(mainApp.getPrimaryStage());
-       alert.setTitle("Courses Selected");
-       alert.setContentText("The courses chosen were: " + "\n" + chosenClassesStr);
+			StringBuilder classesBuilder = new StringBuilder();
+            for (CourseClass c: chosenClasses) {
+                classesBuilder.append(c.toString()).append("\n");
+            }
+            CoursesSelectedAlert.informCoursesSelected(mainApp, classesBuilder.toString());
+        }
+    }
 
-       alert.showAndWait();
-		}
-		
-	}	
-	
-	/**
+
+
+    /**
 	 * Shows details of the chosen class for the selected course if one has been chosen.
 	 * Other wise it will show empty fields.
 	 * @param course Course object that represents a Class section

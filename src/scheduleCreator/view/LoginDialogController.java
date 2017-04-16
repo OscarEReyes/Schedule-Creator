@@ -1,7 +1,7 @@
 package scheduleCreator.view;
 
 
-import invalidInputHandling.InvalidFieldHandling;
+import alertMessages.InvalidFieldHandling;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
