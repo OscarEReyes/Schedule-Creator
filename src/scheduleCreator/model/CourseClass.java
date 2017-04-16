@@ -1,7 +1,5 @@
 package scheduleCreator.model;
 
-import exceptions.FullClassException;
-import exceptions.NullClassFieldException;
 
 public class CourseClass {
 	private final Schedule schedule; 
@@ -83,21 +81,16 @@ public class CourseClass {
 				this.schedule = schedule;
 			}	
 			
-			CourseInstanceBuilder placesLeft(int placesLeft) throws FullClassException {
-				if (placesLeft != 0) { 
-					this.placesLeft = placesLeft;
-					return this;
-				} else {
-					throw new FullClassException("Class is full");
-				}
-				
+			CourseInstanceBuilder placesLeft(int placesLeft) {
+                this.placesLeft = placesLeft;
+                return this;
 			}
 			
-			CourseInstanceBuilder classCrn(String classCrn) throws NullClassFieldException {
+			CourseInstanceBuilder classCrn(String classCrn) {
 				if (classCrn != null) {
 					this.classCrn = classCrn;
 				} else { 
-					throw new NullClassFieldException("Null CRN");
+					this.classCrn = "Not Available";
 				}
 				return this;
 			}
@@ -107,14 +100,13 @@ public class CourseClass {
 				return this;
 			}
 			
-			CourseInstanceBuilder classProf(String classProf) throws NullClassFieldException {
+			CourseInstanceBuilder classProf(String classProf) {
 				if (classProf != null) {
-					this.classProf = classProf;
-				} else {
-					throw new NullClassFieldException("Null Professor");
-				}
+                    this.classProf = classProf;
+                } else {
+				    this.classProf = "Not Available";
+                }
 				return this;
-
 			}
 			
 			CourseInstanceBuilder courseInfo(Course courseInfo) {

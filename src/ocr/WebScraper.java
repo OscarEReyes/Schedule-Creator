@@ -94,8 +94,17 @@ public class WebScraper {
 			codeMap.put("Summer", "30");
 			codeMap.put("Spring", "20");
 
+			String season = semester.getSeason();
+			String elementCode;
+
+			if (season.equals("Fall") || season.equals("Winter")) {
+				int code = Integer.parseInt(semester.getYear()) + 1;
+				elementCode = String.valueOf(code);
+			} else {
+				elementCode = semester.getYear();
+			}
 			// Select Semester term
-			new Select(driver.findElement(By.name("p_term"))).selectByValue(semester.getYear() + codeMap.get(semester.getSeason()));
+			new Select(driver.findElement(By.name("p_term"))).selectByValue(elementCode + codeMap.get(season));
 
 			driver.findElement(By.xpath("//input[3]")).click(); 
 

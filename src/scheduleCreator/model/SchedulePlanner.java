@@ -8,17 +8,15 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import exceptions.FullClassException;
-import exceptions.InvalidSectionException;
-import exceptions.NullClassFieldException;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+
 import ocr.ImageAnalyzer;
 import ocr.WebScraper;
 import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.PreferenceDialogController.Preferences;
 import scheduleCreator.view.SemesterDialogController.Semester;
+
+import static alertMessages.unavailableClassAlert.alertClassesUnavailable;
 
 public class SchedulePlanner {
 	private User user;
@@ -50,63 +48,61 @@ public class SchedulePlanner {
 
 
 	/**
-	 * Checks if a college class is open based on its string of information,
-	 * if it is open, it creates a CourseClass instance and adds it to the passed
-	 * classList.
+	 * Handles adding classes that are open.
+	 * if it is a valid class it will execute the isOpenClass method which takes care of adding it to classList
+     * if open.
+     *
+     * Informs the user if there were classes that were unavailable. (Closed, full, or dual-enrollment classes)
 	 * @param classes String representing classes
 	 * @param classList List of CourseClass Objects
 	 * @param course Course Object
 	 */
 	private void addOpenClasses(String[] classes, List<CourseClass> classList, Course course) {
-		int fullClassCount = 0;
-		int invalidSectionCount = 0;
-		
-		for (String c : classes) {
-			Boolean classInfoIsValid = c.length() > 1;
-			Boolean classIsNotClosed = c.charAt(1) != 'C';
-			
-			if (classInfoIsValid && classIsNotClosed) {
-				CourseClass courseClass = null;
-				try {
-					courseClass = createCourseInstance(c, course);
-				} catch (FullClassException e) {
-					fullClassCount += 1;
-				} catch (InvalidSectionException e) {
-					invalidSectionCount += 1;
-				} catch (NullClassFieldException e) {
-					e.getMessage();
-				} finally {
-					if (courseClass != null) {
-						classList.add(courseClass);
-					}
-				}
-			}
-		}
-		if (fullClassCount > 0 || invalidSectionCount > 0) {
-		  Alert alert = new Alert(AlertType.ERROR);
-      alert.initOwner(null);
-      alert.setTitle("Full and unavailable classes");
-      alert.setContentText("Full Classes: " + fullClassCount + 
-      		"\nDual-Enrollment or Honor-Roll classes: " + invalidSectionCount);
-      
-      // Show error message window and wait for a response.
-      alert.showAndWait();
-		}
-	}
+        int unavailableClassCount = 0;
+        for (String classString : classes) {
+            // If String length is greater than 1 and not some empty string or space
+            if (classString.length() > 1) {
+                if (!isOpenCourse(classString, classList, course)) {
+                        unavailableClassCount += 1;
+                }
+            }
+        }
+        if (unavailableClassCount > 0) {
+            alertClassesUnavailable(unavailableClassCount);
+        }
+    }
+
+    /**
+     * Returns true if classString represents an open Course available for registration and adds it to classList.
+     *
+     * @param classString String representation of a class in TAMUK
+     * @param classList List of CourseClass objects to which a generated CourseClass object is added if open.
+     * @param course A Course object from which a CourseClass is built.
+     * @return Boolean to inform if the course was Open or not.
+     */
+    private boolean isOpenCourse(String classString, List<CourseClass> classList, Course course) {
+        // Check that selection status is SR (Selective Registration)
+        if (classString.substring(0, 2).equals("SR")) {
+            CourseClass courseClass = createCourseInstance(classString, course);
+            boolean noSpaceLeft = courseClass.getPlacesLeft() == 0;
+            boolean invalidSection = courseClass.getClassSection().equals("invalid");
+
+            if (!noSpaceLeft && !invalidSection) {
+                classList.add(courseClass);
+                return true;
+            }
+        }
+        return false;
+    }
 
 	/**
 	 * Creates a CourseClass objects and returns it.
 	 * @param info String representing info about a class
 	 * @param course Course Object
 	 * @return CourseClass object that gets its information from the string passed.
-	 * @throws FullClassException 
-	 * @throws InvalidSectionException 
-	 * @throws NullClassFieldException 
+
 	 */
-	private CourseClass createCourseInstance(String info, Course course)
-			throws FullClassException, 
-						 InvalidSectionException,
-						 NullClassFieldException {
+	private CourseClass createCourseInstance(String info, Course course) {
 		ClassInformation cInfo = new ClassInformation(info);
 		Schedule schedule = new Schedule(cInfo.getDays(), cInfo.getHours(), cInfo.getLocation());
 
@@ -118,7 +114,6 @@ public class SchedulePlanner {
 				.classProf(cInfo.getProf())
 				.courseInfo(course).build();
 	}
-
 
 	/**
 	 * Gets optimal classes
@@ -345,7 +340,7 @@ public class SchedulePlanner {
 		private String location = null;
 		private int spacesLeft;
 
-		ClassInformation(String classInfo) throws InvalidSectionException {
+		ClassInformation(String classInfo) {
 			String noPrecedingNumbers = "(?<!\\d)";
 			String noFollowingNumbers = "(?!\\d)";
 			String legalDaysRepr = "(\\p{Upper}{1,4})";
@@ -381,14 +376,14 @@ public class SchedulePlanner {
 			}
 			
 			if(sectionMatcher.find()) {
-				try {
-					this.section = sectionMatcher.group();
-					Integer.parseInt(sectionMatcher.group());
-				} catch (NumberFormatException e) {
-					throw new InvalidSectionException(this.section);
-				}
-			}
-			
+                String section = sectionMatcher.group();
+                if (Character.isLetter(section.charAt(1))) {
+                    this.section = "invalid";
+                } else {
+                    this.section = section;
+                }
+            }
+
 			if(daysMatcher.find()) {
 				this.days = daysMatcher.group(); 
 			}
