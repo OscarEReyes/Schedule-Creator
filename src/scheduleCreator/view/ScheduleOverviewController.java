@@ -187,12 +187,23 @@ public class ScheduleOverviewController {
 		if (chosenClasses == null) {
             SchedGenErrorAlert.alertSchedGenError(mainApp);
 		} else {
-			StringBuilder classesBuilder = new StringBuilder();
-            for (CourseClass c: chosenClasses) {
-                classesBuilder.append(c.toString()).append("\n");
-            }
+			StringBuilder classesBuilder = getChosenClasses(chosenClasses);
             CoursesSelectedAlert.informCoursesSelected(mainApp, classesBuilder.toString());
         }
+    }
+
+    /**
+     * Returns a StringBuilder object, which when turned to as String represents the classes chosen by the user.
+     *
+     * @param chosenClasses List of CourseClass objects representing classes chosen by the user.
+     * @return
+     */
+    private StringBuilder getChosenClasses(List<CourseClass> chosenClasses) {
+        StringBuilder classesBuilder = new StringBuilder();
+        for (CourseClass c: chosenClasses) {
+            classesBuilder.append(c.toString()).append("\n");
+        }
+        return classesBuilder;
     }
 
     /**
@@ -222,7 +233,7 @@ public class ScheduleOverviewController {
             labLabel.setText("No lab");
         }
     }
-    
+
     private void clearLabelsText() {
         crnLabel.setText("");
         sectionLabel.setText("");
