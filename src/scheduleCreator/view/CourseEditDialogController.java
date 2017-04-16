@@ -38,7 +38,7 @@ public class CourseEditDialogController {
     /**
      * Sets this dialog's stage.
      * 
-     * @param dialogStage
+     * @param dialogStage Stage Instance
      */
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -48,12 +48,12 @@ public class CourseEditDialogController {
     /**
      * Sets fields to the values of the course that is being edited.
      * 
-     * @param course
+     * @param course Course Object Instance, Course being edited
      */
     public void setCourse(Course course) {
         this.course = course;
 
-        courseDepartmentField.setText(course.getCourseDepartment());
+        courseDepartmentField.setText(course.getCourseDep());
         courseNumberField.setText(course.getCourseNumber());
         courseNameField.setText(course.getCourseName());
         prefProfField.setText(course.getPrefProf());
@@ -62,7 +62,7 @@ public class CourseEditDialogController {
     /**
      * Returns true if user has clicked the confirm button,
      * Returns false if it is not the case.
-     * @return
+     * @return Boolean stating if Confirm was clicked
      */
     public boolean isConfirmClicked() {
         return confirmClicked;
@@ -74,10 +74,11 @@ public class CourseEditDialogController {
     @FXML
     private void handleConfirm() {
         if (isInputValid()) {
-            course.setCourseDepartment(courseDepartmentField.getText());
+            course.setCourseDep(courseDepartmentField.getText());
             course.setCourseNumber(courseNumberField.getText());
             course.setCourseName(courseNameField.getText());
             course.setPrefProf(prefProfField.getText());
+            course.setCreditHours(Character.toString(courseNumberField.getText().charAt(1)));
             confirmClicked = true;
             dialogStage.close();
         }
