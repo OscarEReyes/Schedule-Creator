@@ -195,8 +195,6 @@ public class ScheduleOverviewController {
         }
     }
 
-
-
     /**
 	 * Shows details of the chosen class for the selected course if one has been chosen.
 	 * Other wise it will show empty fields.
@@ -204,31 +202,35 @@ public class ScheduleOverviewController {
 	 */
 	@FXML
 	private void showClassDetails(Course course) {
-    if (course != null && course.getChosenClass() != null) {
-        // Fill the labels with info from the course object.
-    		CourseClass chosenClass = course.getChosenClass();
-    		
+        if (course != null && course.getChosenClass() != null) {
+            CourseClass chosenClass = course.getChosenClass();
+            setLabelsText(chosenClass);
+        } else {
+            clearLabelsText();
+        }
+    }
+
+    private void setLabelsText(CourseClass chosenClass) {
         crnLabel.setText(chosenClass.getClassCrn());
         sectionLabel.setText(chosenClass.getClassSection());
         professorLabel.setText(chosenClass.getClassProf());
         scheduleLabel.setText(chosenClass.getSchedule().toString());
         placesLeftLabel.setText(Integer.toString(chosenClass.getPlacesLeft()));
         if (chosenClass.getLab() != null) {
-          labLabel.setText(chosenClass.getLab().toString());
+            labLabel.setText(chosenClass.getLab().toString());
         } else {
-          labLabel.setText("No lab");
+            labLabel.setText("No lab");
         }
-    } else {
-        // CollegeCourse is null, clear all text.
-    	crnLabel.setText("");
-      sectionLabel.setText("");
-      professorLabel.setText("");
-      scheduleLabel.setText("");
-      placesLeftLabel.setText("");
-      labLabel.setText("");
-
     }
-}
+    
+    private void clearLabelsText() {
+        crnLabel.setText("");
+        sectionLabel.setText("");
+        professorLabel.setText("");
+        scheduleLabel.setText("");
+        placesLeftLabel.setText("");
+        labLabel.setText("");
+    }
 
 
 }
