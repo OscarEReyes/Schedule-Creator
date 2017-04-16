@@ -34,7 +34,7 @@ public class WebScraper {
 	/**
 	 * Sets this dialog's stage.
 	 * 
-	 * @param dialogStage
+	 * @param dialogStage Stage Instance
 	 */
 	public void setDialogStage(Stage dialogStage) {
 		this.dialogStage = dialogStage;
@@ -42,9 +42,9 @@ public class WebScraper {
 	
   /**
    * A method that will scrape the Blue & Gold website for the list of classes of a course.
-   * @param user
-   * @param course
-   * @param semester
+   * @param user User Object Instance
+   * @param course Course Object Instance
+   * @param semester Semester Object instance, the Semester the user is interested in.
    * @return File - an image that will be used to perform OCR and get the classes for a course
    * @throws IOException
    */
@@ -60,13 +60,9 @@ public class WebScraper {
 
 			// Initialize WebDriver 
 			WebDriver driver = new  PhantomJSDriver(caps);
-
 			JavascriptExecutor js;
-			if (driver instanceof JavascriptExecutor) {
-				js = (JavascriptExecutor)driver;
-			} else {
-				throw new IllegalStateException("This driver does not support JavaScript!");
-			}
+
+			js = (JavascriptExecutor)driver;
 
 			// Set size of window (Affects Screenshot size)
 			Dimension dimension = new Dimension(1800, 1000);
@@ -90,7 +86,7 @@ public class WebScraper {
 			driver.findElement(By.linkText("Registration")).click();  	
 			driver.findElement(By.cssSelector("a[href*='.p_sel_crse_search']")).click();
 
-			HashMap<String, String> codeMap = new HashMap<String, String>(); 
+			HashMap<String, String> codeMap = new HashMap<>();
 			codeMap.put("Fall", "10");
 			codeMap.put("Winter Intersession", "15");
 			codeMap.put("Spring Intersession", "25");
@@ -99,7 +95,7 @@ public class WebScraper {
 			codeMap.put("Spring", "20");
 
 			// Select Semester term
-			new Select(driver.findElement(By.name("p_term"))).selectByValue(semester.getYear() + codeMap.get(semester.getSeason()).toString());
+			new Select(driver.findElement(By.name("p_term"))).selectByValue(semester.getYear() + codeMap.get(semester.getSeason()));
 
 			driver.findElement(By.xpath("//input[3]")).click(); 
 
@@ -109,7 +105,7 @@ public class WebScraper {
 			return imageFile;
 		}
 
-	public File getImageFromPage(WebDriver driver, Course course, JavascriptExecutor js)
+	private File getImageFromPage(WebDriver driver, Course course, JavascriptExecutor js)
 			throws IOException{
 		
 		List<WebElement> subject;
@@ -118,8 +114,8 @@ public class WebScraper {
 		try { 
 			// Retrieves the element that is displayed
 			for (WebElement elem: subject){
-				if (elem.isDisplayed() == true) {
-					new Select(elem).selectByValue(course.getCourseDepartment());	
+				if (elem.isDisplayed()) {
+					new Select(elem).selectByValue(course.getCourseDep());
 				}
 			}
 	
@@ -146,9 +142,8 @@ public class WebScraper {
 			List<WebElement> l = table.findElements(By.tagName("tr"));
 	
 			// Resize page text
-			resizeText(js, driver, l);
-			File imageFile = getImage(driver);
-			return imageFile;
+			resizeText(js, l);
+			return getImage(driver);
 		} catch (org.openqa.selenium.NoSuchElementException e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.initOwner(dialogStage);
@@ -165,11 +160,11 @@ public class WebScraper {
 	 * Deletes extra text from the page
 	 * This ranges from the user information on top of the page to the footer text.
 	 * This deletes anything not related to Course Classes.
-	 * @param js
-	 * @param driver
-	 * @param table
+	 * @param js JavascriptExecutor Instance
+	 * @param driver WebDriver Instance
+	 * @param table WebElement object, expected to be a table
 	 */
-	public void delExtraText(JavascriptExecutor js, WebDriver driver, WebElement table) {
+	private void delExtraText(JavascriptExecutor js, WebDriver driver, WebElement table) {
 		WebElement p = table.findElement(By.xpath("./.."));
 		List <WebElement> inputs = p.findElements(By.tagName("input"));
 		String removeScript = "arguments[0].parentNode.removeChild(arguments[0])";
@@ -190,7 +185,7 @@ public class WebScraper {
 		}
 
 		for (WebElement elem: inputs){
-			if (elem.isDisplayed() == true) {
+			if (elem.isDisplayed()) {
 				js.executeScript(removeScript, elem);
 			}
 		}
@@ -199,11 +194,10 @@ public class WebScraper {
 	/**
 	 * Changes the font from the page.
 	 * Useful so Tess4j can do a good job at recognizing text
-	 * @param js
-	 * @param driver
-	 * @param list
+	 * @param js JavascriptExecutor instance
+	 * @param list A list of WebElement objects
 	 */
-	public void resizeText(JavascriptExecutor js, WebDriver driver, List<WebElement> list) {
+	private void resizeText(JavascriptExecutor js, List<WebElement> list) {
 		for (WebElement webElem: list) {
 			String changeFontScript = "arguments[0].style.fontSize='25px'";
 			js.executeScript(changeFontScript, webElem);
@@ -211,16 +205,15 @@ public class WebScraper {
 			for(WebElement div: webElem.findElements(By.tagName("div"))) {
 				js.executeScript(changeFontScript, div);
 			}
-			
 		}
 	}
 
 	/** 
 	 * Removes rows that do not contain class information
-	 * @param table
-	 * @param js
+	 * @param table A WebElement object, expected to be a table
+	 * @param js JavascriptExecutor Instance
 	 */
-	public void cleanRows(WebElement table, JavascriptExecutor js) {
+	private void cleanRows(WebElement table, JavascriptExecutor js) {
 		// Create a list of "tr" elements
 		List<WebElement> unwantedRows;
 		unwantedRows = table.findElements(By.tagName("tr"));
@@ -237,12 +230,12 @@ public class WebScraper {
 
   /**
    * Takes in a table element and an JavascriptExecutor.
-   * The JavaScriptExectuor is tied to the driver and so the changes it does
+   * The JavaScriptExecutor is tied to the driver and so the changes it does
    * affect the driver that is passed. Removes unwanted columns from table.
-   * @param table
-   * @param js
+   * @param table WebElement table
+   * @param js JavascriptExecutor Instance
    */
-	public void cleanColumns(WebElement table, JavascriptExecutor js){
+	private void cleanColumns(WebElement table, JavascriptExecutor js){
 		// Create a list of "tr" elements
 		List<WebElement> rows;
 		rows = table.findElements(By.tagName("tr"));
@@ -265,18 +258,16 @@ public class WebScraper {
 	
 	/**
 	 * Gets a screenshot from the driver
-	 * @param driver
+	 * @param driver driver used
 	 * @return File - Screenshot of driver
 	 * @throws IOException
 	 */
-	public File getImage(WebDriver driver) throws IOException{
+	private File getImage(WebDriver driver) throws IOException{
 		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 		String imgDir = "\\tempPic\\screenshot.png";
 
 		FileUtils.copyFile(scrFile, new File(imgDir));
-		File imageFile = new File(imgDir);
-		return imageFile;
-	
-}
+		return new File(imgDir);
+	}
 	
 	}

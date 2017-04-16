@@ -84,7 +84,7 @@ public class ScheduleOverviewController {
 	/**
 	 * Gives the mainApp a reference to itself when called by mainApp
 	 * 
-	 * @param mainApp
+	 * @param mainApp var for self-referencing
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
@@ -103,10 +103,10 @@ public class ScheduleOverviewController {
 	private void showCollegeCourseDetails(Course course) {
 	    if (course != null) {
 	        // Fill the labels with info from the course object.
-	        courseLabel.setText(course.getCourseDepartment() + 
+	        courseLabel.setText(course.getCourseDep() +
 	        					course.getCourseNumber());
 	        courseNameLabel.setText(course.getCourseName());
-	        creditHoursLabel.setText(Integer.toString(course.getCreditHours()));
+	        creditHoursLabel.setText(course.getCreditHours());
 	        prefProfLabel.setText(course.getPrefProf());
 	  
 	    } else {
@@ -115,7 +115,6 @@ public class ScheduleOverviewController {
 	        courseNameLabel.setText("");
 	        creditHoursLabel.setText("");
 	        prefProfLabel.setText("");
-
 	    }
 	}
 	
@@ -215,7 +214,7 @@ public class ScheduleOverviewController {
 	/**
 	 * Shows details of the chosen class for the selected course if one has been chosen.
 	 * Other wise it will show empty fields.
-	 * @param course
+	 * @param course Course object that represents a Class section
 	 */
 	@FXML
 	private void showClassDetails(Course course) {

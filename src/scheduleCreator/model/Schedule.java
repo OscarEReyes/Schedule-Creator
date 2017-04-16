@@ -28,7 +28,7 @@ public class Schedule {
 		
 	}
 	
-	public String getClassDays() {
+	String getClassDays() {
 		return this.classDays;
 	}
 	
@@ -40,11 +40,11 @@ public class Schedule {
 		return this.classLocation;
 	}
 	
-	public int getStartTime() {
+	int getStartTime() {
 		return this.startTime;
 	}
 	
-	public int getEndTime() {
+	int getEndTime() {
 		return this.endTime;
 	}
 	

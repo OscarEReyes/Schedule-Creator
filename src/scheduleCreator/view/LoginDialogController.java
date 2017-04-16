@@ -1,10 +1,9 @@
 package scheduleCreator.view;
 
 
+import invalidInputHandling.InvalidFieldHandling;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class LoginDialogController {
@@ -15,7 +14,6 @@ public class LoginDialogController {
 
 	private Stage dialogStage;
 	private User user;
-	private Boolean loginClicked = false;
 
 	public User getUser() {
 		return this.user;
@@ -35,17 +33,9 @@ public class LoginDialogController {
 	 * 
 	 * @param dialogStage
 	 */
+	@SuppressWarnings("JavaDoc")
 	public void setDialogStage(Stage dialogStage) {
 		this.dialogStage = dialogStage;
-	}
-
-	/**
-	 * Returns true if user has clicked the login button,
-	 * Returns false if it is not the case.
-	 * @return
-	 */
-	public boolean isLoginClicked() {
-		return loginClicked;
 	}
 
 
@@ -56,7 +46,6 @@ public class LoginDialogController {
 	private void handleLogin() {
 		if (isInputValid()) {
 			this.user = new User(usernameField.getText(), passwordField.getText());
-			loginClicked = true;
 			dialogStage.close();
 		}
 	}
@@ -87,20 +76,8 @@ public class LoginDialogController {
 			errorMessage += "Not a valid 6-character pin!\n"; 
 		}
 
-		if (errorMessage.length() == 0) {
-			return true;
-		} else {
-			// Create error message window.
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.initOwner(dialogStage);
-			alert.setTitle("Invalid Fields");
-			alert.setContentText(errorMessage);
+		return InvalidFieldHandling.checkErrorMessage(dialogStage, errorMessage);
 
-			// Show error message window and wait for a response.
-			alert.showAndWait();
-
-			return false;
-		}
 	}
 
 	public class User{

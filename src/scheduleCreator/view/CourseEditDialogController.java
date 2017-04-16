@@ -1,12 +1,10 @@
 package scheduleCreator.view;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import scheduleCreator.model.Course;
-
+import invalidInputHandling.InvalidFieldHandling;
 
 /*
  * Controller for CourseEditDialog
@@ -114,20 +112,7 @@ public class CourseEditDialogController {
             errorMessage += "No valid course name!\n"; 
         }
 
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            // Create error message window.
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.initOwner(dialogStage);
-            alert.setTitle("Invalid Fields");
-            alert.setContentText(errorMessage);
-            
-            // Show error message window and wait for a response.
-            alert.showAndWait();
-
-            return false;
-        }
+        return InvalidFieldHandling.checkErrorMessage(dialogStage, errorMessage);
     }
 
 

@@ -15,7 +15,6 @@ public class SemesterDialogController {
 	private ChoiceBox<String> yearChoiceBox;
 
 	private Stage dialogStage;
-	private Boolean confirmClicked = false;
 	private Semester semester;
 
 	/**
@@ -24,7 +23,7 @@ public class SemesterDialogController {
 	 */
 	@FXML
 	private void initialize() {
-		List<String> seasonList = new ArrayList<String>();
+		List<String> seasonList = new ArrayList<>();
 		seasonList.add("Fall");
 		seasonList.add("Winter Intersession");
 		seasonList.add("Spring");
@@ -32,7 +31,7 @@ public class SemesterDialogController {
 		seasonList.add("Summer");
 		seasonList.add("Summer Intersession");
 
-		List<String> yearList = new ArrayList<String>();
+		List<String> yearList = new ArrayList<>();
 		yearList.add("2016");
 		yearList.add("2017");
 		yearList.add("2018");
@@ -61,22 +60,11 @@ public class SemesterDialogController {
 
 
 	/**
-	 * Returns true if user has clicked the confirm button,
-	 * Returns false if it is not the case.
-	 * @return
-	 */
-	public boolean isConfirmClicked() {
-		return confirmClicked;
-	}
-
-
-	/**
 	 * Executed if the user clicks confirm.
 	 */
 	@FXML
 	private void handleConfirm() {
 		this.semester = new Semester(seasonChoiceBox.getValue(), yearChoiceBox.getValue());
-		confirmClicked = true;
 		dialogStage.close();
 	}
 
@@ -97,7 +85,7 @@ public class SemesterDialogController {
 		private final String season;
 		private final String year;
 
-		public Semester(final String season, final String year){
+		Semester(final String season, final String year){
 			this.season = season;
 			this.year = year;
 		}
