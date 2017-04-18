@@ -19,13 +19,12 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.Select;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import scheduleCreator.model.Course;
-import scheduleCreator.view.LoginDialogController.User;
-import scheduleCreator.view.SemesterDialogController.Semester;
+import siteClasses.Semester;
+import siteClasses.User;
 
+import static alertMessages.courseSearchErrorAlert.informCourseSearchError;
 
 
 public class WebScraper {
@@ -116,10 +115,8 @@ public class WebScraper {
 
 	private File getImageFromPage(WebDriver driver, Course course, JavascriptExecutor js)
 			throws IOException{
-		
 		List<WebElement> subject;
 		subject = driver.findElements(By.name("sel_subj"));
-		
 		try { 
 			// Retrieves the element that is displayed
 			for (WebElement elem: subject){
@@ -127,43 +124,42 @@ public class WebScraper {
 					new Select(elem).selectByValue(course.getCourseDep());
 				}
 			}
-	
+
 			driver.findElement(By.xpath("//input[18]")).click();
-	
-			// Look for table display with the text equal to the course name
-			// Use it to get its parent and then select the right submit button  
-			String textPath = "//td[contains(text(),'" + course.getCourseName() +  "')]";
-			String returnScript = "return arguments[0].parentNode;";
-			WebElement elem = driver.findElement(By.xpath(textPath));
-	
-			WebElement parentElement = (WebElement)js.executeScript(returnScript, elem);
-	
-			parentElement.findElement(By.name("SUB_BTN")).click();
-	
-			// Get the table of classes
-			elem = driver.findElement(By.className("datadisplaytable"));
-			WebElement table = elem.findElement(By.tagName("tbody"));
-			
-			// Clean up page by deleting unnecessary rows, columns, and trivial text
-			cleanRows(table, js);
-			cleanColumns(table, js);
-			delExtraText(js, driver, elem);
-			List<WebElement> l = table.findElements(By.tagName("tr"));
-	
+			selectCourseFromTable(driver, js, course);
+			WebElement table = getClassTable(driver);
+            cleanUpPage(table, js, driver);
 			// Resize page text
-			resizeText(js, l);
+            List<WebElement> l = table.findElements(By.tagName("tr"));
+            resizeText(js, l);
+
 			return getImage(driver);
 		} catch (org.openqa.selenium.NoSuchElementException e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.initOwner(dialogStage);
-			alert.setTitle("Department or Course Not Found");
-			alert.setContentText("ERROR");
-
-			// Show error message window and wait for a response.
-			alert.showAndWait();
-			return null;
+			informCourseSearchError(dialogStage);
+		    return null;
 		}
-}
+    }
+    // Look for table display with the text equal to the course name
+    // Use it to get its parent and then select the right submit button
+    private void selectCourseFromTable(WebDriver driver, JavascriptExecutor js, Course course){
+        String textPath = "//td[contains(text(),'" + course.getCourseName() +  "')]";
+        WebElement elem = driver.findElement(By.xpath(textPath));
+        String returnScript = "return arguments[0].parentNode;";
+        WebElement parentElement = (WebElement)js.executeScript(returnScript, elem);
+        parentElement.findElement(By.name("SUB_BTN")).click();
+    }
+    private WebElement getClassTable(WebDriver driver) {
+        WebElement elem = driver.findElement(By.className("datadisplaytable"));
+        return elem.findElement(By.tagName("tbody"));
+    }
+
+    private void cleanUpPage(WebElement table, JavascriptExecutor js, WebDriver driver) {
+        // Clean up page by deleting unnecessary rows, columns, and trivial text
+        cleanRows(table, js);
+        cleanColumns(table, js);
+        WebElement elem = driver.findElement(By.className("datadisplaytable"));
+        delExtraText(js, driver, elem);
+    }
 	
 	/**
 	 * Deletes extra text from the page
