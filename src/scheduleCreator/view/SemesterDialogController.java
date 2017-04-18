@@ -7,8 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
+import siteClasses.Semester;
 
-public class SemesterDialogController {
+ public class SemesterDialogController {
 	@FXML
 	private ChoiceBox<String> seasonChoiceBox;
 	@FXML
@@ -80,24 +81,4 @@ public class SemesterDialogController {
 		return this.semester;
 	}
 
-
-	public class Semester {
-		private final String season;
-		private final String year;
-
-		Semester(final String season, final String year){
-			this.season = season;
-			this.year = year;
-		}
-
-		public String getSeason() {
-			return this.season;
-		}
-
-		public String getYear() {
-			return this.year;
-		}
-
-
-	}
 }

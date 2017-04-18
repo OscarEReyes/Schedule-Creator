@@ -5,6 +5,7 @@ import alertMessages.InvalidFieldHandling;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import siteClasses.User;
 
 public class LoginDialogController {
 	@FXML
@@ -79,25 +80,4 @@ public class LoginDialogController {
 		return InvalidFieldHandling.checkErrorMessage(dialogStage, errorMessage);
 
 	}
-
-	public class User{
-		private final String username;
-		private final String password;
-
-		public User(final String username, final String password){
-			this.username = username;
-			this.password = password;
-		}
-
-		public String getUsername() {
-			return this.username;
-		}
-
-		public String getPassword() {
-			return this.password;
-		}
-
-
-	}
-
 }
