@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javafx.collections.ObservableList;
 
 import ocr.ImageAnalyzer;
 import ocr.WebScraper;
-import scheduleCreator.view.LoginDialogController.User;
-import scheduleCreator.view.PreferenceDialogController.Preferences;
-import scheduleCreator.view.SemesterDialogController.Semester;
+import regexMatchers.classInfoPatterns;
+import regexMatchers.schedulePattern;
+import siteClasses.Semester;
+import siteClasses.User;
 
 import static alertMessages.unavailableClassAlert.alertClassesUnavailable;
 
@@ -46,6 +46,29 @@ public class SchedulePlanner {
 		return getOptimalClasses(courseList);
 	}
 
+    /**
+     * Performs OCR on an image displaying classes of a certain subject.
+     *
+     * @param course Course Object
+     * @return String array, each array being the information of a class in a predictable order.
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    private String[] getCourseClasses(Course course) throws IOException, InterruptedException {
+        File imageFile;
+        String results;
+        WebScraper scraper = new WebScraper();
+        ImageAnalyzer imAn = new ImageAnalyzer();
+        imageFile = scraper.scrapeCoursePage(user, course, semester);
+
+        if (imageFile != null) {
+            results = imAn.analyzeImage(imageFile);
+            return results.split("\\r?\\n");
+        } else {
+            return null;
+        }
+    }
 
 	/**
 	 * Handles adding classes that are open.
@@ -265,31 +288,6 @@ public class SchedulePlanner {
 		}
 		return false;
 	}
-	
-
-	/**
-	 * Performs OCR on an image displaying classes of a certain subject.
-	 * 
-	 * @param course Course Object
-	 * @return String array, each array being the information of a class in a predictable order.
-	 * 
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	private String[] getCourseClasses(Course course) throws IOException, InterruptedException {
-		File imageFile;
-		String results;
-		WebScraper scraper = new WebScraper();
-		ImageAnalyzer imAn = new ImageAnalyzer();
-		imageFile = scraper.scrapeCoursePage(user, course, semester);
-
-		if (imageFile != null) {
-			results = imAn.analyzeImage(imageFile);
-			return results.split("\\r?\\n");
-		} else {
-			return null;
-		}
-	}
 
 
 	/**
@@ -332,44 +330,22 @@ public class SchedulePlanner {
 	 *
 	 */
 	private class ClassInformation {
-		private String crn = null;
-		private String section = null;
-		private String days = null;
-		private String hours = null;
-		private String prof = null;
-		private String location = null;
+		private String crn;
+		private String section;
+		private String days;
+		private String hours;
+		private String prof;
+		private String location;
 		private int spacesLeft;
 
 		ClassInformation(String classInfo) {
-			String noPrecedingNumbers = "(?<!\\d)";
-			String noFollowingNumbers = "(?!\\d)";
-			String legalDaysRepr = "(\\p{Upper}{1,4})";
-			String hour = "(\\d{2}.\\d{2}\\s\\p{Lower}{2})";
-			String precededBySpacesLeft = "(?<=\\s\\d{1,2}?\\s)";
-			String precededBySpace = "(?<=\\s)";
-			String followedByHour = "(?=\\s\\d{2}.\\d{2}\\s\\p{Lower}{2})";
-			String precededByHour = "(?<=m\\s)";
-			String followedByProf = "(?=\\s\\p{Upper})";
-			String anything = ".+?";
-			String followedByProfMark = "(?=\\s\\p{Punct}P\\p{Punct})"; // "(P)"
-			String precededByProfMark = "(?<=\\s\\p{Punct}P\\p{Punct})";
-			
-			String crnPattern = noPrecedingNumbers + "\\d{5}" + noFollowingNumbers;
-			String sectionPattern = noPrecedingNumbers + "\\p{Alnum}{3}" + noFollowingNumbers;
-			String daysPattern = precededBySpace + legalDaysRepr + followedByHour;
-			String hoursPattern = hour + "-" + hour;
-			String profPattern = precededBySpacesLeft + anything + followedByProfMark;
-			String spacesLeftPattern = precededByHour + "(\\d{1,2})" + followedByProf;
-			String locationPattern = precededByProfMark + ".+"; // Finds profMark and reads till EOL
-
-			final Matcher crnMatcher = Pattern.compile(crnPattern).matcher(classInfo);
-			final Matcher sectionMatcher = Pattern.compile(sectionPattern).matcher(classInfo);
-			final Matcher daysMatcher = Pattern.compile(daysPattern).matcher(classInfo);
-			final Matcher hoursMatcher = Pattern.compile(hoursPattern).matcher(classInfo);
-			final Matcher profMatcher = Pattern.compile(profPattern).matcher(classInfo);
-			final Matcher spacesLeftMatcher = Pattern.compile(spacesLeftPattern).matcher(classInfo);
-			final Matcher locationMatcher = Pattern.compile(locationPattern).matcher(classInfo);
-
+			final Matcher crnMatcher = classInfoPatterns.getCRNMatcher(classInfo);
+            final Matcher sectionMatcher = classInfoPatterns.getSectionMatcher(classInfo);
+			final Matcher daysMatcher = schedulePattern.getDaysMatcher(classInfo);
+			final Matcher hoursMatcher = schedulePattern.getHoursMatcher(classInfo);
+            final Matcher profMatcher = classInfoPatterns.getProfMatcher(classInfo);
+			final Matcher spacesLeftMatcher = classInfoPatterns.getSpacesLeftMatcher(classInfo);
+			final Matcher locationMatcher = classInfoPatterns.getLocationMatcher(classInfo);
 
 			if(crnMatcher.find()) {
 				this.crn = crnMatcher.group(); 
@@ -523,7 +499,7 @@ public class SchedulePlanner {
 			Boolean startsInBetween = start <= startTime && end > endTime;
 			Boolean endsHalfway = start <= endTime && end > endTime;
 			Boolean sameDays = days.equals(d);
-			
+
 			if (sameTimes && sameDays) {
 				return true;
 			} else if (start <= startTime && end >= endTime && sameDays) {

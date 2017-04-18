@@ -25,6 +25,14 @@ public class Course {
 		        Character.toString(this.courseNumber.get().charAt(1)));
         this.prefProf = builder.prefProf;
 	}
+
+	public Course() {
+	    this.courseDep = new SimpleStringProperty("MATH");
+        this.courseName = new SimpleStringProperty("Calculus II");
+	    this.courseNumber = new SimpleStringProperty("2414");
+	    this.prefProf = new SimpleStringProperty("");
+	    this.creditHours = new SimpleStringProperty("4");
+    }
 	
 	// Setters
 	

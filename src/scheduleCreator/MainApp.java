@@ -17,12 +17,12 @@ import scheduleCreator.model.CourseClass;
 import scheduleCreator.model.SchedulePlanner;
 import scheduleCreator.view.CourseEditDialogController;
 import scheduleCreator.view.LoginDialogController;
-import scheduleCreator.view.LoginDialogController.User;
 import scheduleCreator.view.PreferenceDialogController;
 import scheduleCreator.view.PreferenceDialogController.Preferences;
 import scheduleCreator.view.ScheduleOverviewController;
 import scheduleCreator.view.SemesterDialogController;
-import scheduleCreator.view.SemesterDialogController.Semester;
+import siteClasses.Semester;
+import siteClasses.User;
 
 public class MainApp extends Application {
 	private Stage primaryStage;
@@ -281,4 +281,19 @@ public class MainApp extends Application {
 
 	}
 
+	public List<CourseClass> generateSchedule(String username, String password) throws IOException, InterruptedException {
+		SchedulePlanner sp = new SchedulePlanner.SchedulePlannerBuilder()
+				.user(user)
+				.semester(semester)
+				.build();
+		try {
+			return sp.genSchedule(CollegeCourseData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 }
