@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import alertMessages.invalidInputAlert;
+import fieldSetup.comboBoxSetUp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -50,53 +51,27 @@ public class PreferenceDialogController {
 		ToggleGroup startToggle = new ToggleGroup();
 		startEarly.setToggleGroup(startToggle);
 		finishEarly.setToggleGroup(startToggle);
-		// Sets startTimeList and endTimeList
-  	    List<String> startTimeList = initializeStartTimeList();
-        List<String> endTimeList = initializeEndTimeList();
-        // Sets the times for time Combo Boxes
-        setTimeComboBox(startTimeList, startTime);
-        setTimeComboBox(endTimeList, endTime);
+		initializeStartTimeComboBox();
+        initializeEndTimeComboBox();
 	}
 
-    /**
-     * Initializes the List of Strings startTimeList representing starting times, and returns it.
-     * @return returns a List of Strings representing start times.
-     */
-	private List<String> initializeStartTimeList() {
-        List<String> startTimeList = new ArrayList<>();
+
+	private void initializeStartTimeComboBox() {
         String[] startArr = {"8:00 am", "09:00 am", "10:00 am", "11:00 am", "12:00 pm",
                              "01:00 pm", "02:00 pm","03:00 pm", "04:00 pm", "05:00 pm"};
-        List<String> temp = Arrays.asList(startArr);
-        startTimeList.addAll(temp);
+		comboBoxSetUp.setUpComboBox(startArr, startTime);
 
-        return startTimeList;
-    }
+	}
 
     /**
      * Initializes the List of Strings endTimeList representing ending times, and returns it.
      * @return returns a List of Strings representing end times.
      */
-    private List<String> initializeEndTimeList() {
-        List<String> endTimeList = new ArrayList<>();
+    private void initializeEndTimeComboBox() {
         String[] endArr = {"12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm",
                            "05:00 pm", "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm"};
-        List<String>temp = Arrays.asList(endArr);
-        endTimeList.addAll(temp);
-
-        return endTimeList;
+        comboBoxSetUp.setUpComboBox(endArr, endTime);
     }
-
-    /**
-     * Sets Items for a ComboBox of Strings based on String list passed as a parameter.
-     * @param timeList The List of Strings taken. Filled with times.
-     * @param time The ComboBox (StartTime or EndTime) whose items will be set.
-     */
-    private void setTimeComboBox(List<String> timeList, ComboBox<String> time) {
-	    ObservableList<String> observableTimeList = FXCollections.observableList(timeList);
-	    time.getItems().clear();
-	    time.setItems(observableTimeList);
-    }
-
 
 	/**
 	 * Sets this dialog's stage.

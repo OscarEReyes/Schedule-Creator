@@ -2,6 +2,8 @@
 
 import java.util.ArrayList;
 import java.util.List;
+
+import fieldSetup.choiceBoxSetUp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,29 +26,12 @@ import siteClasses.Semester;
 	 */
 	@FXML
 	private void initialize() {
-		List<String> seasonList = new ArrayList<>();
-		seasonList.add("Fall");
-		seasonList.add("Winter Intersession");
-		seasonList.add("Spring");
-		seasonList.add("Spring Intersession");
-		seasonList.add("Summer");
-		seasonList.add("Summer Intersession");
-
-		List<String> yearList = new ArrayList<>();
-		yearList.add("2016");
-		yearList.add("2017");
-		yearList.add("2018");
-		yearList.add("2019");
-		yearList.add("2020");
-
-		ObservableList<String> obSeasonList = FXCollections.observableList(seasonList);
-		ObservableList<String> obYearList = FXCollections.observableList(yearList);
-
-		seasonChoiceBox.getItems().clear();
-		seasonChoiceBox.setItems(obSeasonList);
-
-		yearChoiceBox.getItems().clear();
-		yearChoiceBox.setItems(obYearList);
+		// Set Up season ChoiceBox
+		String[] seasonArr = {"Fall", "Winter Intersession", "Spring", "Summer", "Summer Intersession"};
+		choiceBoxSetUp.setUpChoiceBox(seasonArr, seasonChoiceBox);
+		// Set Up Year ChoiceBox
+		String[] yearArr = {"2015", "2016", "2017", "2018", "2019", "2020"};
+		choiceBoxSetUp.setUpChoiceBox(yearArr, yearChoiceBox);
 	}
 
 
