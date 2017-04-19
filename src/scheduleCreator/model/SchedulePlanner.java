@@ -38,7 +38,7 @@ public class SchedulePlanner {
 			throws IOException, 
 			InterruptedException {
 		for (Course course: courseList) {
-			List<CourseClass> classList = new ArrayList<CourseClass>();
+			List<CourseClass> classList = new ArrayList<>();
 			String[] classes = getCourseClasses(course);
 			addOpenClasses(classes, classList, course);
 			course.setCourseClasses(classList);
@@ -144,10 +144,10 @@ public class SchedulePlanner {
 	 * @return a List of CourseClass objects
 	 */
 	private List<CourseClass> getOptimalClasses(ObservableList<Course> courseList) {
-		Stack<Course> priorityStack = new Stack<Course>();
-		Stack<Course> nPriorityStack = new Stack<Course>();
-		List<CourseClass> chosenClasses = new ArrayList<CourseClass>();
-		List<ScheduledClass> takenTimes = new ArrayList<ScheduledClass>();
+		Stack<Course> priorityStack = new Stack<>();
+		Stack<Course> nPriorityStack = new Stack<>();
+		List<CourseClass> chosenClasses = new ArrayList<>();
+		List<ScheduledClass> takenTimes = new ArrayList<>();
 
 		// Sort list of Course Objects based on the size of their classes lists. 
 		// From least to greatest.

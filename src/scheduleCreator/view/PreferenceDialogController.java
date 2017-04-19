@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import alertMessages.invalidInputAlert;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,10 +34,7 @@ public class PreferenceDialogController {
 	private ComboBox<String> startTime; 
 	@FXML
 	private ComboBox<String> endTime;
-	@FXML
-	private Button confirm;
-	@FXML
-	private Button cancel;
+
 	private Preferences preferences;
 	private Stage dialogStage;
 	private Boolean confirmClicked = false;
@@ -48,35 +46,62 @@ public class PreferenceDialogController {
 	 */
 	@FXML
 	private void initialize() {
+	    // Sets Toggle Group
 		ToggleGroup startToggle = new ToggleGroup();
-		
 		startEarly.setToggleGroup(startToggle);
 		finishEarly.setToggleGroup(startToggle);
-  	    List<String> startTimeList = new ArrayList<>();
-  	    String[] startArr = {"8:00 am", "09:00 am", "10:00 am", "11:00 am", "12:00 pm",
-                        "01:00 pm", "02:00 pm","03:00 pm", "04:00 pm", "05:00 pm"};
+		// Sets startTimeList and endTimeList
+  	    List<String> startTimeList = initializeStartTimeList();
+        List<String> endTimeList = initializeEndTimeList();
+        // Sets the times for time Combo Boxes
+        setTimeComboBox(startTimeList, startTime);
+        setTimeComboBox(endTimeList, endTime);
+	}
+
+    /**
+     * Initializes the List of Strings startTimeList representing starting times, and returns it.
+     * @return returns a List of Strings representing start times.
+     */
+	private List<String> initializeStartTimeList() {
+        List<String> startTimeList = new ArrayList<>();
+        String[] startArr = {"8:00 am", "09:00 am", "10:00 am", "11:00 am", "12:00 pm",
+                             "01:00 pm", "02:00 pm","03:00 pm", "04:00 pm", "05:00 pm"};
         List<String> temp = Arrays.asList(startArr);
         startTimeList.addAll(temp);
 
-    ObservableList<String> obStartTimeList = FXCollections.observableList(startTimeList);
-    startTime.getItems().clear();
-    startTime.setItems(obStartTimeList);
-    
-    List<String> endTimeList = new ArrayList<>();
-    String[] endArr = {"12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm",
-                        "05:00 pm", "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm"};
+        return startTimeList;
+    }
 
-    ObservableList<String> obEndTimeList = FXCollections.observableList(endTimeList);
-    endTime.getItems().clear();
-    endTime.setItems(obEndTimeList);
-  	
-	}
+    /**
+     * Initializes the List of Strings endTimeList representing ending times, and returns it.
+     * @return returns a List of Strings representing end times.
+     */
+    private List<String> initializeEndTimeList() {
+        List<String> endTimeList = new ArrayList<>();
+        String[] endArr = {"12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm",
+                           "05:00 pm", "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm"};
+        List<String>temp = Arrays.asList(endArr);
+        endTimeList.addAll(temp);
+
+        return endTimeList;
+    }
+
+    /**
+     * Sets Items for a ComboBox of Strings based on String list passed as a parameter.
+     * @param timeList The List of Strings taken. Filled with times.
+     * @param time The ComboBox (StartTime or EndTime) whose items will be set.
+     */
+    private void setTimeComboBox(List<String> timeList, ComboBox<String> time) {
+	    ObservableList<String> observableTimeList = FXCollections.observableList(timeList);
+	    time.getItems().clear();
+	    time.setItems(observableTimeList);
+    }
 
 
 	/**
 	 * Sets this dialog's stage.
 	 * 
-	 * @param dialogStage
+	 * @param dialogStage DialogStage to set this Class' dialog stage.
 	 */
 	public void setDialogStage(Stage dialogStage) {
 		this.dialogStage = dialogStage;
@@ -97,32 +122,47 @@ public class PreferenceDialogController {
 	 */
 	@FXML
 	private void handleConfirm() {
-		String startPreferences;
 		if (isInputValid()) {
-			if (startEarly.isSelected() == true) {
-				startPreferences = "startEarly";
-			} else {
-				startPreferences = "finishEarly";
-			}
-			
-			ArrayList<String> daysPreferred = new ArrayList<String>();
-			if (MWF.isSelected() == true){
-				daysPreferred.add("MWF");
-			}
-			if (MW.isSelected() == true){
-				daysPreferred.add("MW");
-			}
-			if (TR.isSelected() == true){
-				daysPreferred.add("TR");
-			}
-			if (oneDay.isSelected() == true){
-				daysPreferred.add("OneDay");
-			}
+		    String startPreferences = setStartFinishPriorityPref();
+            ArrayList<String> daysPreferred = getDaysPrefered();
 			this.preferences = new Preferences(daysPreferred, startPreferences, startTime.getValue(), endTime.getValue());
 			confirmClicked = true;
 			dialogStage.close();
 		}
 	}
+
+    /**
+     * Returns a string depending on the users preference for starting or finishing early.
+     * @return returns a String representing preference for starting or finishing early.
+     */
+	private String setStartFinishPriorityPref() {
+        if (startEarly.isSelected()) {
+            return "startEarly";
+        } else {
+            return "finishEarly";
+        }
+    }
+
+    /**
+     * Adds days selected to an ArrayList of Strings and returns it.
+     * @return returns an ArrayList of Strings representing the days the user selected.
+     */
+    private ArrayList<String> getDaysPrefered() {
+        ArrayList<String> daysPreferred = new ArrayList<>();
+        if (MWF.isSelected()){
+            daysPreferred.add("MWF");
+        }
+        if (MW.isSelected()){
+            daysPreferred.add("MW");
+        }
+        if (TR.isSelected()){
+            daysPreferred.add("TR");
+        }
+        if (oneDay.isSelected()){
+            daysPreferred.add("OneDay");
+        }
+        return daysPreferred;
+    }
 
 	/**
 	 * Executed when the cancel button is clicked.
@@ -132,7 +172,6 @@ public class PreferenceDialogController {
 		dialogStage.close();
 	}
 
-
 	/**
 	 * Verifies that the user input is valid.
 	 * 
@@ -141,31 +180,20 @@ public class PreferenceDialogController {
 	private boolean isInputValid() {
 		String errorMessage = "";
 
-		if (startEarly.isSelected() == false && finishEarly.isSelected() == false) {
+		if (!startEarly.isSelected() && !finishEarly.isSelected()) {
 			errorMessage += "No finish preference selected!\n"; 
 		}
-
 		if (startTime.getValue() == null || endTime.getValue() == null) {
 			errorMessage += "No valid start time or end time!"; 
 		}
-		
-		if (MWF.isSelected() == false && TR.isSelected() == false &&
-				MW.isSelected() == false && oneDay.isSelected() == false) {
+		if (!(MWF.isSelected() || TR.isSelected() || MW.isSelected() || oneDay.isSelected())) {
 			errorMessage += "No day preference selected!";
 		}
-		
 		if (errorMessage.length() == 0) {
 			return true;
 		} else {
-			// Create error message window.
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.initOwner(dialogStage);
-			alert.setTitle("Invalid Fields");
-			alert.setContentText(errorMessage);
-
-			// Show error message window and wait for a response.
-			alert.showAndWait();
-
+		    //Inform user of errors.
+            invalidInputAlert.informInvalidFields(dialogStage, errorMessage);
 			return false;
 		}
 	}
