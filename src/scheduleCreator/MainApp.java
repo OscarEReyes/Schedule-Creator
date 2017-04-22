@@ -102,7 +102,7 @@ public class MainApp extends Application {
 
 	/**
 	 * Returns the main stage.
-	 * @return
+	 * @return returns primary stage
 	 */
 
 	public Stage getPrimaryStage() {
@@ -123,6 +123,7 @@ public class MainApp extends Application {
 	 * @param collegeCourse -  the CollegeCourse object to be edited
 	 * @return true if the user clicked the Confirm button, otherwise false
 	 */
+
 	public boolean showCollegeCourseEditDialog(Course collegeCourse) {
 		try {
 			// Load the course edit dialog fxml file 
@@ -160,7 +161,8 @@ public class MainApp extends Application {
 	 *  Opens a login prompt for the user to input his login information.
 	 *  @return User object with login information
 	 */
-	public User showLoginDialog() {
+
+	private User showLoginDialog() {
 		try {
 			// Load the login dialog fxml file 
 			// Create a new stage for the dialog.
@@ -195,7 +197,8 @@ public class MainApp extends Application {
 	 *  Opens a semester prompt for the user to input his login information.
 	 *  @return User object with login information
 	 */
-	public Semester showSemesterDialog() {
+
+	private Semester showSemesterDialog() {
 		try{
 			// Load the Semester dialog fxml file 
 			// Create a new stage for the dialog.
@@ -230,6 +233,7 @@ public class MainApp extends Application {
 	 *  Opens a semester prompt for the user to input his preferences
 	 *  @return Preferences object
 	 */
+
 	public Preferences showPreferencesDialog() {
 		try{
 			// Load the Semester dialog fxml file 
@@ -268,28 +272,11 @@ public class MainApp extends Application {
 				.build();
 		try {
 			return sp.genSchedule(CollegeCourseData);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
-		return null;
+        return null;
 
 	}
-
-	public List<CourseClass> generateSchedule(String username, String password) throws IOException, InterruptedException {
-		SchedulePlanner sp = new SchedulePlanner.SchedulePlannerBuilder()
-				.user(user)
-				.semester(semester)
-				.build();
-		try {
-			return sp.genSchedule(CollegeCourseData);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return null;
-
-	}
+    
 }
