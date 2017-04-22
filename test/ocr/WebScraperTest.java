@@ -7,7 +7,7 @@ import siteClasses.User;
 import webScraping.WebScraper;
 
 /**
- * Created by oscarjr on 4/16/2017.
+ * Created by Oscar Reyes on 4/16/2017.
  */
 public class WebScraperTest {
     @Test

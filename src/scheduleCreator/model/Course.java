@@ -15,7 +15,7 @@ public class Course {
 	
 	private List<CourseClass> courseClasses;
 	private boolean prefProfAvailable = false;
-	private CourseClass chosenClass = null;
+	private CourseClass chosenClass;
 	
 	public Course(CollegeCourseBuilder builder) {
 		this.courseDep = builder.courseDep;
@@ -26,6 +26,7 @@ public class Course {
         this.prefProf = builder.prefProf;
 	}
 
+	// This is a constructor just for testing.
 	public Course() {
 	    this.courseDep = new SimpleStringProperty("MATH");
         this.courseName = new SimpleStringProperty("Calculus II");
