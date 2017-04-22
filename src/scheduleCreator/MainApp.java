@@ -1,8 +1,5 @@
 package scheduleCreator;
 
-import java.io.IOException;
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,14 +12,13 @@ import javafx.stage.Stage;
 import scheduleCreator.model.Course;
 import scheduleCreator.model.CourseClass;
 import scheduleCreator.model.SchedulePlanner;
-import scheduleCreator.view.CourseEditDialogController;
-import scheduleCreator.view.LoginDialogController;
-import scheduleCreator.view.PreferenceDialogController;
+import scheduleCreator.view.*;
 import scheduleCreator.view.PreferenceDialogController.Preferences;
-import scheduleCreator.view.ScheduleOverviewController;
-import scheduleCreator.view.SemesterDialogController;
 import siteClasses.Semester;
 import siteClasses.User;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MainApp extends Application {
 	private Stage primaryStage;
