@@ -1,20 +1,19 @@
 package scheduleCreator.model;
 
+import javafx.collections.ObservableList;
+import ocr.ImageAnalyzer;
+import regexMatchers.classInfoPatterns;
+import regexMatchers.schedulePattern;
+import siteClasses.Semester;
+import siteClasses.User;
+import webScraping.WebScraper;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
-
-import javafx.collections.ObservableList;
-
-import ocr.ImageAnalyzer;
-import ocr.WebScraper;
-import regexMatchers.classInfoPatterns;
-import regexMatchers.schedulePattern;
-import siteClasses.Semester;
-import siteClasses.User;
 
 import static alertMessages.unavailableClassAlert.alertClassesUnavailable;
 
@@ -60,7 +59,7 @@ public class SchedulePlanner {
         String results;
         WebScraper scraper = new WebScraper();
         ImageAnalyzer imAn = new ImageAnalyzer();
-        imageFile = scraper.scrapeCoursePage(user, course, semester);
+        imageFile = scraper.getScreenshot(user, semester, course);
 
         if (imageFile != null) {
             results = imAn.analyzeImage(imageFile);
