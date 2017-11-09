@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="200.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduleCreator.view.CourseEditDialogController">
    <children>
       <GridPane layoutX="21.0" layoutY="35.0" prefHeight="162.0" prefWidth="394.0">
@@ -35,9 +28,9 @@
               </buttons>
             </ButtonBar>
             <TextField fx:id="courseDepartmentField" GridPane.columnIndex="1" />
-            <TextField fx:id="courseNumberField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="crnField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="courseNameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="prefProfField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="preferredProfField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>

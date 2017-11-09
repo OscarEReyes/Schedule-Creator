@@ -1,27 +1,30 @@
 package scheduleCreator.view;
 
-	
-import java.io.IOException;
-import java.util.List;
-
-import alertMessages.CoursesSelectedAlert;
-import alertMessages.SchedGenErrorAlert;
 import alertMessages.SelectionAlert;
+import javafx.beans.property.ReadOnlyProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import scheduleCreator.MainApp;
 import scheduleCreator.model.Course;
-import scheduleCreator.model.CourseClass;
+import scheduleCreator.model.CourseSection;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class ScheduleOverviewController {
-	@FXML
-	private TableView<Course> CourseTable;
+    private ObservableList<Course> courses;
+    private HashMap<String, String> defaultCourseValues = new HashMap<>();
+    private MainApp mainApp;
+    private TableView.TableViewSelectionModel<Course> courseTableSelectionModel;
+
+    @FXML
+    private TableView<Course> courseTable;
     @FXML
     private TableColumn<Course, String> courseNameColumn;
-
     @FXML
     private Label courseLabel;
     @FXML
@@ -30,233 +33,103 @@ public class ScheduleOverviewController {
     private Label creditHoursLabel;
     @FXML
     private Label prefProfLabel;
-    
+
+    public ScheduleOverviewController() {}
+
     @FXML
-    private Label crnLabel;
-    @FXML
-    private Label sectionLabel;
-    @FXML
-    private Label professorLabel;
-    @FXML
-    private Label scheduleLabel;
-    @FXML
-    private Label placesLeftLabel;
-    @FXML
-    private Label labLabel;
+    private void initialize() {
+        courseTableSelectionModel = courseTable.getSelectionModel();
+        ReadOnlyProperty<Course> selectedCourseProperty = courseTableSelectionModel.selectedItemProperty();
 
+        courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().courseNameProperty());
+        selectedCourseProperty.addListener((observable, oldValue, newValue) -> setLabels(newValue));
 
-	// Reference to the main application in the program.
-	private MainApp mainApp;
+        setLabelsEmpty();
+        initializeDefaultCourseValues();
 
-	
-	/**
-	* Constructor for ScheduleOverviewController.
-	* This is called before the initialize() method is called.
-    */
-	public ScheduleOverviewController() {
-   }
-
-
-	/**
-     * Initializes the controller class. 
-     * Automatically called once the fxml file has been loaded.
-     */
-	@FXML
-	private void initialize() {
-		// Initialize the Schedule table with its column.
-		courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().courseNameProperty());
-		 // Clear the CollegeCourse Information.
-	    showCollegeCourseDetails(null);
-	    // "Listen" for selection changes and display the selected course's details
-	    // when selection is changed
-	    CourseTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> showCollegeCourseDetails(newValue));
-	    // "Listen" for selection changes and display the selected course's chosen class details
-	    // when selection is changed
-	    CourseTable.getSelectionModel().selectedItemProperty().addListener(
-          (observable, oldValue, newValue) -> showClassDetails(newValue));
-	}
-
-	
-	/**
-	 * Gives the mainApp a reference to itself when called by mainApp
-	 * 
-	 * @param mainApp var for self-referencing
-	 */
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
-
-	    // Add observable list data to the table
-	    CourseTable.setItems(mainApp.getCollegeCourseData());
-	}
-	
-	
-	/**
-	 * Fills every text field to display information about the college course.
-	 * If the specified college course is null, clears all text fields.
-	 * 
-	 * @param course or null
-	 */
-	private void showCollegeCourseDetails(Course course) {
-	    if (course != null) {
-            setCourseLabels(course);
-	    } else {
-	        clearCollegeCourseLabels();
-	    }
-	}
-
-    /**
-     * Sets the text of Labels related to a Course object, using the values in a passed Course object course.
-     * @param course The selected Course, whose details the user wishes to see.
-     */
-    private void setCourseLabels(Course course) {
-        courseLabel.setText(course.getCourseDep() +
-                course.getCourseNumber());
-        courseNameLabel.setText(course.getCourseName());
-        creditHoursLabel.setText(course.getCreditHours());
-        prefProfLabel.setText(course.getPrefProf());
     }
 
-    /**
-     * Clears the labels associated with a Course object.
-     * Ran when the user has selected a blank field and there is no Course to load.
-     */
-	private void clearCollegeCourseLabels() {
+    private void initializeDefaultCourseValues() {
+        defaultCourseValues.put("name", "");
+        defaultCourseValues.put("department", "");
+        defaultCourseValues.put("courseNumber", "");
+        defaultCourseValues.put("pref.professor", "");
+    }
+
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
+        courses = mainApp.getCourses();
+        courseTable.setItems(mainApp.getCourses());
+    }
+
+    private void setLabels(Course course) {
+        courseLabel.setText(course.getDepartment() + course.getCourseNumber());
+        courseNameLabel.setText(course.getCourseName());
+        creditHoursLabel.setText(course.getCreditHours());
+        prefProfLabel.setText(course.getPreferredProf());
+    }
+
+    @FXML
+    private void handleNewCollegeCourse() {
+        Course tempCourse = createCourse(defaultCourseValues);
+        HashMap<String, String> courseValues = mainApp.showCourseEditDialog(tempCourse);
+        addCourse(courseValues);
+    }
+
+    @FXML
+    private void handleEditCollegeCourse() {
+        Course selectedCourse = courseTableSelectionModel.getSelectedItem();
+        if (selectedCourse != null) {
+            editCourse(selectedCourse);
+        } else {
+            SelectionAlert.alertSelectionError(mainApp);
+        }
+    }
+
+    private void editCourse(Course selectedCourse) {
+        HashMap<String, String> courseValues = mainApp.showCourseEditDialog(selectedCourse);
+        if (addCourse(courseValues)) {
+            courses.remove(selectedCourse);
+        }
+    }
+
+    private Boolean addCourse(HashMap<String, String> courseValues) {
+        if (!courseValues.isEmpty()) {
+            Course course = createCourse(courseValues);
+            courses.add(course);
+            return true;
+        }
+        return false;
+    }
+
+    @FXML
+    private void handleRemoveCourse() {
+        int index = courseTableSelectionModel.getSelectedIndex();
+        if (index >= 0) {
+            courseTable.getItems().remove(index);
+        } else {
+            SelectionAlert.alertSelectionError(mainApp);
+        }
+    }
+
+    @FXML
+    private void handleGenerateSchedule() throws IOException, InterruptedException {
+        List<CourseSection> chosenClasses = mainApp.generateSchedule();
+    }
+
+    private Course createCourse(HashMap<String, String> courseValues) {
+        return new Course.CourseBuilder(courseValues.get("name"))
+                .courseDepartment(courseValues.get("department"))
+                .courseNumber(courseValues.get("courseNumber"))
+                .preferredProfessor(courseValues.get("pref.professor"))
+                .build();
+    }
+
+    private void setLabelsEmpty() {
         courseLabel.setText("");
         courseNameLabel.setText("");
         creditHoursLabel.setText("");
         prefProfLabel.setText("");
     }
-	
-	/**
-	 * Called when the user clicks on the remove course button.
-	 */
-	@FXML
-	private void handleRemoveCourse() {
-	    int selectedIndex = CourseTable.getSelectionModel().getSelectedIndex();
-	    if (selectedIndex >= 0) {
-	    	CourseTable.getItems().remove(selectedIndex);
-	   	} else {
-            SelectionAlert.alertSelectionError(mainApp);
-	    }
-	}
-	
-	
-	/**
-	 * Called when the user clicks the confirm button. 
-	 * Opens a dialog for the user to input data and create a new CollegeCourse
-	 */
-	@FXML
-	private void handleNewCollegeCourse() {
-	    Course tempCollegeCourse = new Course.CollegeCourseBuilder("Course")
-	    		.courseDepartment()
-	    		.courseNumber()
-	    		.build();
-	    
-	    boolean confirmedClicked = mainApp.showCollegeCourseEditDialog(tempCollegeCourse);
-	    if (confirmedClicked) {
-	        mainApp.getCollegeCourseData().add(tempCollegeCourse);
-	    }
-	}
-
-	
-	/**
-	 * Called when the user clicks the edit button. 
-	 * Opens a dialog the user uses to edit a CollegeCourse object.
-	 */
-	@FXML
-	private void handleEditCollegeCourse() {
-	    Course selectedCourse = CourseTable.getSelectionModel().getSelectedItem();
-	    if (selectedCourse != null) {
-	        boolean confirmedClicked = mainApp.showCollegeCourseEditDialog(selectedCourse);
-	        if (confirmedClicked) {
-	            showCollegeCourseDetails(selectedCourse);
-	        }
-	    } else {
-	        // Handle no course being selected.
-            SelectionAlert.alertSelectionError(mainApp);
-        }
-	}
-	
-	/**
-	 * Called when the user clicks the generate schedule button. 
-	 * This method results in the schedule being generated, but specifically,
-	 * this method handles alerting the user of what classes were chosen or if an error occurred
-	 * 
-	 * The SchedulePlanner object chooses the appropriate classes and sets the chosenClass
-	 * attribute in a Course object to the CourseClass instance of the appropriate class.
-	 * @throws IOException 
-	 * @throws InterruptedException 
-	 */
-	@FXML
-	private void handleGenerateSchedule() throws IOException, InterruptedException {	
-		List<CourseClass> chosenClasses = mainApp.generateSchedule();
-		if (chosenClasses == null) {
-            SchedGenErrorAlert.alertSchedGenError(mainApp);
-		} else {
-			StringBuilder classesBuilder = getChosenClasses(chosenClasses);
-            CoursesSelectedAlert.informCoursesSelected(mainApp, classesBuilder.toString());
-        }
-    }
-
-    /**
-     * Returns a StringBuilder object, which when turned to as String represents the classes chosen by the user.
-     *
-     * @param chosenClasses List of CourseClass objects representing classes chosen by the user.
-     * @return classesBuilder The StringBuilder which when converted to a string represents a chosen class.
-     */
-    private StringBuilder getChosenClasses(List<CourseClass> chosenClasses) {
-        StringBuilder classesBuilder = new StringBuilder();
-        for (CourseClass c: chosenClasses) {
-            classesBuilder.append(c.toString()).append("\n");
-        }
-        return classesBuilder;
-    }
-
-    /**
-	 * Shows details of the chosen class for the selected course if one has been chosen.
-	 * Other wise it will show empty fields.
-	 * @param course Course object that represents a Class section
-	 */
-	@FXML
-	private void showClassDetails(Course course) {
-        if (course != null && course.getChosenClass() != null) {
-            CourseClass chosenClass = course.getChosenClass();
-            setLabelsText(chosenClass);
-        } else {
-            clearLabelsText();
-        }
-    }
-
-    /**
-     * Sets the labels related to CourseClasses using the class selected by the user.
-     * @param chosenClass The class the user selected, whose values will be used to populate the appropiate labels.
-     */
-    private void setLabelsText(CourseClass chosenClass) {
-        crnLabel.setText(chosenClass.getClassCrn());
-        sectionLabel.setText(chosenClass.getClassSection());
-        professorLabel.setText(chosenClass.getClassProf());
-        scheduleLabel.setText(chosenClass.getSchedule().toString());
-        placesLeftLabel.setText(Integer.toString(chosenClass.getPlacesLeft()));
-        if (chosenClass.getLab() != null) {
-            labLabel.setText(chosenClass.getLab().toString());
-        } else {
-            labLabel.setText("No lab");
-        }
-    }
-
-    /**
-     *  Clears course class related labels.
-     */
-    private void clearLabelsText() {
-        crnLabel.setText("");
-        sectionLabel.setText("");
-        professorLabel.setText("");
-        scheduleLabel.setText("");
-        placesLeftLabel.setText("");
-        labLabel.setText("");
-    }
-
-
 }
 
