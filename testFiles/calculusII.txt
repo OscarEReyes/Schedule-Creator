@@ -1,0 +1,20 @@
+SR 11177 MATH 2414 001 M 4.000 Calculus II Full Term MWF 10:00 am-10:50 am 35 18 17 0 0 0 Aden Omar Ahmed (P) 08/23-12/14 RHOD 342
+Instructor CV, Course Syllabus - Not Found, Department Budget **THE ABOVE CRN 11177 IS LINKED WITH CRN 11181.***
+SR 11178 MATH 2414 002 M 4.000 Calculus II Full Term MWF 01:00 pm-01:50 pm 35 7 28 0 0 0 Aden Omar Ahmed (P) 08/23-12/14 RHOD 343
+Instructor CV, Course Syllabus - Not Found, Department Budget **THE ABOVE CRN 11178 IS LINKED WITH CRN 11182.***
+SR 11179 MATH 2414 003 M 4.000 Calculus II Full Term TR 08:00 am-09:15 am 35 3 32 0 0 0 Rongdong Wang (P) 08/23-12/14 RHOD 104
+Instructor CV, Course Syllabus - Not Found, Department Budget **THE ABOVE CRN 11179 IS LINKED WITH CRN 11183.***
+SR 11180 MATH 2414 004 M 4.000 Calculus II Full Term TR 09:30 am-10:45 am 35 19 16 0 0 0 Rongdong Wang (P) 08/23-12/14 RHOD 104
+Instructor CV, Course Syllabus - Not Found, Department Budget **THE ABOVE CRN 11180 IS LINKED WITH CRN 11184.***
+SR 12365 MATH 2414 005 M 4.000 Calculus II Full Term TR 11:00 am-12:15 pm 30 22 8 0 0 0 Rongdong Wang (P) 08/23-12/14 SPEC 121
+Instructor CV, Course Syllabus - Not Found, Department Budget **THE ABOVE CRN 12365 IS LINKED TO CRN 12366.**
+SR 11181 MATH 2414 101 M 0.000 Calculus II Full Term TR 09:30 am-10:20 am 35 18 17 0 0 0 Aden Omar Ahmed (P) 08/23-12/14 RHOD 243
+Instructor CV, Course Syllabus - N/A, Department Budget **THE ABOVE CRN 11181 IS LINKED WITH CRN 11177.***
+SR 11182 MATH 2414 102 M 0.000 Calculus II Full Term TR 12:30 pm-01:20 pm 35 7 28 0 0 0 Aden Omar Ahmed (P) 08/23-12/14 RHOD 243
+Instructor CV, Course Syllabus - N/A, Department Budget **THE ABOVE CRN 11182 IS LINKED WITH CRN 11178.***
+SR 11183 MATH 2414 103 M 0.000 Calculus II Full Term MW 09:00 am-09:50 am 35 3 32 0 0 0 Rongdong Wang (P) 08/23-12/14 RHOD 122
+Instructor CV, Course Syllabus - N/A, Department Budget **THE ABOVE CRN 11183 IS LINKED WITH CRN 11179.***
+SR 11184 MATH 2414 104 M 0.000 Calculus II Fun Term MW 09:00 am-09:50 am 35 19 16 o o o Rongdong Wang (P) 08/23_12/14 RHOD 243
+Instructor CV, Course Syllabus - N/A, Department Budget **THE ABOVE CRN 11184 IS LINKED WITH CRN 11180.***
+SR 12366 MATH 2414 105 M 0.000 Calculus II Full Term MW 11:00 am-11:50 am 30 22 8 0 0 0 Rongdong Wang (P) 08/23-12/14 RHOD 243
+Instructor CV, Course Syllabus - N/A, Department Budget **THE ABOVE CRN 12366 IS LINKED TO CRN 12365.**
