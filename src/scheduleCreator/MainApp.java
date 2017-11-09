@@ -10,273 +10,181 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduleCreator.model.Course;
-import scheduleCreator.model.CourseClass;
-import scheduleCreator.model.SchedulePlanner;
+import scheduleCreator.model.CourseSection;
 import scheduleCreator.view.*;
 import scheduleCreator.view.PreferenceDialogController.Preferences;
 import siteClasses.Semester;
 import siteClasses.User;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 public class MainApp extends Application {
-	private Stage primaryStage;
-	private BorderPane rootLayout;
-	private ObservableList<Course> CollegeCourseData = FXCollections.observableArrayList();
-	private User user;
-	private Semester semester;
+    private Stage primaryStage;
+    private BorderPane rootLayout;
+    private ObservableList<Course> Courses = FXCollections.observableArrayList();
+    private User user;
+    private Semester semester;
 
-	/**
-	 * Constructor
-	 */
-	public MainApp() {
+    private static final String ROOT_LAYOUT_FXML = "view/RootLayout.fxml";
+    private static final String SCHEDULE_OVERVIEW_DIALOG_FXML = "view/scheduleOverview.fxml";
+    private static final String COURSE_EDIT_DIALOG_FXML = "view/CourseEditDialog.fxml";
+    private static final String LOGIN_DIALOG_FXML = "view/LoginDialog.fxml";
+    private static final String SEMESTER_DIALOG_FXML = "view/SemesterDialog.fxml";
+    private static final String PREFERENCE_DIALOG_FXML = "view/PreferenceDialog.fxml";
 
-	}
+    public MainApp() {}
 
-	/**
-	 * Returns the data as an observable list of CollegeCourses. 
-	 * @return
-	 */
-	public ObservableList<Course> getCollegeCourseData() {
-		return CollegeCourseData;
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-	@Override
-	public void start(Stage primaryStage) {
-		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("Schedule Creator");
+    public ObservableList<Course> getCourses() {
+        return Courses;
+    }
 
-		initRootLayout();
-		showScheduleOverview();  
-	}
+    @Override
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Schedule Creator");
 
-	/**
-	 * Initializes the root layout.
-	 */
+        initializeRootLayout();
+        requestUserLoginInformation();
+        showOverview();
+    }
 
-	public void initRootLayout() {
-		try {     
-			// Load root layout from fxml file.     
-			FXMLLoader loader = new FXMLLoader();       
-			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));     
-			rootLayout = (BorderPane) loader.load();
-			// Show the scene containing the root layout.  
-			Scene scene = new Scene(rootLayout);            
-			primaryStage.setScene(scene);            
-			primaryStage.show();        
-		} catch (IOException e) {           
-			e.printStackTrace();       
-		}
-	}
+    private void initializeRootLayout() {
+        FXMLLoader loader = createFXMLLoader(ROOT_LAYOUT_FXML);
+        setWithRootLayout(loader);
+    }
 
-	/**
-	 * Shows the schedule overview inside of the root layout.
-	 */
+    private FXMLLoader createFXMLLoader(String dialogFileLocation) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(MainApp.class.getResource(dialogFileLocation));
+        return fxmlLoader;
+    }
 
-	public void showScheduleOverview() {     
-		try {   
-			// Loads the schedule overview.       
-			FXMLLoader loader = new FXMLLoader();    
-			loader.setLocation(MainApp.class.getResource("view/scheduleOverview.fxml"));     
-			AnchorPane scheduleOverview = (AnchorPane) loader.load();   
+    private Stage createDialogStage(String stageTitle) {
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle(stageTitle);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(primaryStage);
+        return dialogStage;
+    }
 
-			// Sets the schedule overview into the center of root layout.     
-			rootLayout.setCenter(scheduleOverview);           
+    // TODO Handle exception with an alert
+    private void setWithRootLayout(FXMLLoader loader) {
+        try {
+            setSceneWithRootLayout(loader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-			// Give mainApp access to the ScheduleOverviewController class.   
-			ScheduleOverviewController controller = loader.getController();   
-			controller.setMainApp(this);  
+    private void setSceneWithRootLayout(FXMLLoader loader) throws IOException {
+        rootLayout = loader.load();
+        Scene scene = new Scene(rootLayout);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
-			do {
-				user = showLoginDialog();
-				semester = showSemesterDialog();
+    private void showOverview() {
+        try {
+            showScheduleOverview();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-			} while (user == null || semester == null);
+    private void showScheduleOverview() throws IOException {
+        FXMLLoader loader = setOverview();
+        ScheduleOverviewController controller = loader.getController();
+        controller.setMainApp(this);
+    }
 
-		} catch (IOException e) {  
-			e.printStackTrace();
-		}
+    private FXMLLoader setOverview() throws IOException {
+        FXMLLoader loader = createFXMLLoader(SCHEDULE_OVERVIEW_DIALOG_FXML);
+        AnchorPane scheduleOverview = loader.load();
+        rootLayout.setCenter(scheduleOverview);
+        return loader;
+    }
 
-	}
+    // TODO make a way for user to cancel login (Really, I could just add or user clicked cancel on the loop used)
+    private void requestUserLoginInformation() {
+        do {
+            user = showLoginDialog();
+            semester = showSemesterDialog();
 
-	/**
-	 * Returns the main stage.
-	 * @return returns primary stage
-	 */
+        } while (user == null || semester == null);
+    }
 
-	public Stage getPrimaryStage() {
-		return primaryStage;
-	}
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
-	public static void main(String[] args) {    
-		launch(args);    
-	}
+    public HashMap<String, String> showCourseEditDialog(Course course) {
+        FXMLLoader fxmlLoader = createFXMLLoader(COURSE_EDIT_DIALOG_FXML);
+        Stage dialogStage = setUpStage("Edit Course", fxmlLoader);
+        CourseEditDialogController controller = fxmlLoader.getController();
 
+        controller.setDialogStage(dialogStage);
+        controller.setCourse(course);
 
-	/**
-	 * Opens a dialog to edit details for the specified CollegeCourse course object. 
-	 * If the user clicks Confirm, the changes made are saved 
-	 * into the passed CollegeCourse object and 
-	 * true is returned.
-	 * 
-	 * @param collegeCourse -  the CollegeCourse object to be edited
-	 * @return true if the user clicked the Confirm button, otherwise false
-	 */
+        controller.setSectionFieldsText();
+        dialogStage.showAndWait();
+        return controller.getValuesForCourse();
+    }
 
-	public boolean showCollegeCourseEditDialog(Course collegeCourse) {
-		try {
-			// Load the course edit dialog fxml file 
-			// Create a new stage for the dialog.
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setLocation(MainApp.class.getResource("view/CourseEditDialog.fxml"));
-			AnchorPane page = (AnchorPane) fxmlLoader.load();
+    private Stage setUpStage(String title, FXMLLoader fxmlLoader) {
+        Stage dialogStage = createDialogStage(title);
+        setWithAnchorPane(dialogStage, fxmlLoader);
+        return dialogStage;
+    }
 
-			// Create the dialog Stage.
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Edit Course");
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(primaryStage);
+    // TODO Handle exception with an alert
+    private void setWithAnchorPane(Stage dialogStage, FXMLLoader loader) {
+        try {
+            setSceneWithAnchorPane(dialogStage, loader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-			// Create Scene and set scene
-			Scene scene = new Scene(page);
-			dialogStage.setScene(scene);
+    private void setSceneWithAnchorPane(Stage dialogStage, FXMLLoader fxmlLoader) throws IOException {
+        AnchorPane loadedFXML  = fxmlLoader.load();
+        Scene scene = new Scene(loadedFXML);
+        dialogStage.setScene(scene);
+    }
 
-			// Set the controller
-			CourseEditDialogController controller = fxmlLoader.getController();
-			controller.setDialogStage(dialogStage);
-			controller.setCourse(collegeCourse);
+    private User showLoginDialog() {
+        FXMLLoader fxmlLoader = createFXMLLoader(LOGIN_DIALOG_FXML);
+        LoginDialogController controller = fxmlLoader.getController();
+        Stage dialogStage = setUpStage("Login", fxmlLoader);
+        controller.setDialogStage(dialogStage);
+        dialogStage.showAndWait();
+        return controller.getUser();
+    }
 
-			// Show the dialog and wait until the user closes it
-			dialogStage.showAndWait();
+    private Semester showSemesterDialog() {
+        FXMLLoader fxmlLoader = createFXMLLoader(SEMESTER_DIALOG_FXML);
+        SemesterDialogController controller = fxmlLoader.getController();
+        Stage dialogStage = setUpStage("Select the semester", fxmlLoader);
+        controller.setDialogStage(dialogStage);
+        dialogStage.showAndWait();
+        return controller.getSemester();
+    }
 
-			return controller.isConfirmClicked();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+    public Preferences showPreferencesDialog() {
+        FXMLLoader fxmlLoader = createFXMLLoader(PREFERENCE_DIALOG_FXML);
+        PreferenceDialogController controller = fxmlLoader.getController();
+        Stage dialogStage = setUpStage("Edit Your Preferences", fxmlLoader);
+        controller.setDialogStage(dialogStage);
+        dialogStage.showAndWait();
+        return controller.getPreferences();
+    }
 
-	/**
-	 *  Opens a login prompt for the user to input his login information.
-	 *  @return User object with login information
-	 */
+    public List<CourseSection> generateSchedule() throws IOException, InterruptedException {
+        return new ArrayList<>();
+    }
 
-	private User showLoginDialog() {
-		try {
-			// Load the login dialog fxml file 
-			// Create a new stage for the dialog.
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setLocation(MainApp.class.getResource("view/LoginDialog.fxml"));
-			AnchorPane login = (AnchorPane) fxmlLoader.load();
-
-			// Create the dialog Stage
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Login");
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(primaryStage);
-
-			// Create Scene and set scene
-			Scene scene = new Scene(login);
-			dialogStage.setScene(scene);
-
-			// Set the controller
-			LoginDialogController controller = fxmlLoader.getController();
-			controller.setDialogStage(dialogStage);
-
-			// Show the dialog and wait until the user closes it
-			dialogStage.showAndWait();
-			return controller.getUser();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 *  Opens a semester prompt for the user to input his login information.
-	 *  @return User object with login information
-	 */
-
-	private Semester showSemesterDialog() {
-		try{
-			// Load the Semester dialog fxml file 
-			// Create a new stage for the dialog.
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setLocation(MainApp.class.getResource("view/SemesterDialog.fxml"));
-			AnchorPane semesterDialog = (AnchorPane) fxmlLoader.load();
-
-			// Create the dialog Stage
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Select the Semester");
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(primaryStage);
-
-			// Create Scene and set scene
-			Scene scene = new Scene(semesterDialog);
-			dialogStage.setScene(scene);
-
-			// Set the controller
-			SemesterDialogController controller = fxmlLoader.getController();
-			controller.setDialogStage(dialogStage);
-
-			// Show the dialog and wait until the user closes it
-			dialogStage.showAndWait();
-			return controller.getSemester();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 *  Opens a semester prompt for the user to input his preferences
-	 *  @return Preferences object
-	 */
-
-	public Preferences showPreferencesDialog() {
-		try{
-			// Load the Semester dialog fxml file 
-			// Create a new stage for the dialog.
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setLocation(MainApp.class.getResource("view/PreferenceDialog.fxml"));
-			AnchorPane preferenceDialog = (AnchorPane) fxmlLoader.load();
-
-			// Create the dialog Stage
-			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Edit Your Preferences");
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(primaryStage);
-
-			// Create Scene and set scene
-			Scene scene = new Scene(preferenceDialog);
-			dialogStage.setScene(scene);
-
-			// Set the controller
-			PreferenceDialogController controller = fxmlLoader.getController();
-			controller.setDialogStage(dialogStage);
-
-			// Show the dialog and wait until the user closes it
-			dialogStage.showAndWait();
-			return controller.getPreferences();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public List<CourseClass> generateSchedule() throws IOException, InterruptedException {
-		SchedulePlanner sp = new SchedulePlanner.SchedulePlannerBuilder()
-				.user(user)
-				.semester(semester)
-				.build();
-		try {
-			return sp.genSchedule(CollegeCourseData);
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-        return null;
-
-	}
-    
 }
